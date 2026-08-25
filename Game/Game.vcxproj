@@ -98,11 +98,13 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actor\Cat.cpp" />
     <ClCompile Include="Actor\Cheese.cpp" />
     <ClCompile Include="Actor\Mouse.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actor\Cat.h" />
     <ClInclude Include="Actor\Cheese.h" />
     <ClInclude Include="Actor\Mouse.h" />
     <ClInclude Include="Level\GameStage.h" />

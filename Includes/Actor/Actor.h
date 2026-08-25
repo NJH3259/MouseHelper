@@ -81,7 +81,7 @@ namespace Craft
 			image = newImage;
 		}
 
-		inline void ResetStopedState() { isActorStoped = false; }
+		inline void ChangeIsActorStopedState() { isActorStoped = !isActorStoped; }
 
 		inline void IsActorStoped() { if (isActorStoped) return; }
 	

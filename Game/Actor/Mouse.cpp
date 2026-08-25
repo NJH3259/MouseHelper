@@ -15,7 +15,7 @@ Mouse::Mouse(const Vector2 position, Color color)
 	//현재 레벨 객체의 FindActorInLevelWithType함수 사용
 	cheese = FindCheeseInLevel();
 
-	ResetStopedState();
+	isActorStoped = false;
 }
 
 void Mouse::Tick(float deltaTime)

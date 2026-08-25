@@ -2,7 +2,6 @@
 
 #include <Actor/Actor.h>
 
-#include <string>
 #include <memory>
 
 class Cheese;
@@ -24,14 +23,6 @@ private:
 	std::shared_ptr<Cheese> FindCheeseInLevel();
 
 private:
-	Craft::Vector2 position = Craft::Vector2(0, 0);
-
-	std::string image;
-
-	bool isGameStoped = false;
-
 	std::shared_ptr<Cheese> cheese = nullptr;
-
-	std::shared_ptr<Level> curLevel;
 };
 

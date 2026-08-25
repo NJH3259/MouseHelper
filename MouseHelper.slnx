@@ -2,6 +2,6 @@
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="CraftEngine/CraftEngine.vcxproj" />
-  <Project Path="Game/Game.vcxproj" />
+  <Project Path="CraftEngine/CraftEngine.vcxproj" Id="222f0a70-6ba4-43e7-acc5-4ac342c2d2e7" />
+  <Project Path="Game/Game.vcxproj" Id="74fff409-19f4-46d1-8e77-a93bfa008fed" />
 </Solution>

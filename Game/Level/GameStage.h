@@ -9,10 +9,14 @@ class GameStage : public Craft::Level
 {
 
 public:
+	//특정 액터 탐색 함수
+	//탬플릿으로 필요에 따라 여러 타입을 받을 수 있고 Actor 하위 클래스만 가능
+	//typestring은 어떤 타입의 엑터를 가져올지 정하도록 하드 코딩으로 지정 -> 본 프로젝트에서 탐색 목표가 2 개이기 때문
 	template<typename T, typename = std::enable_if_t<std::is_base_of<Actor, T>::value>>
 	std::shared_ptr<T> FindActor(std::string typeString)
 	{
 		std::shared_ptr<T> result;
+		//FindActorInLevelWithType은 Actor타입을 반환하므로 커스텀 RTTI의 Cast를 통해 동적 형변환 진행(다운 캐스팅)
 		result = Cast<T>(FindActorInLevelWithType(typeString));
 
 		if (!result)

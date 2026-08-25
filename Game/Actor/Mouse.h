@@ -1,8 +1,6 @@
 #pragma once
 
 #include <Actor/Actor.h>
-#include <Math/Vector2.h>
-#include <Math/Color.h>
 
 #include <string>
 #include <memory>
@@ -33,5 +31,7 @@ private:
 	bool isGameStoped = false;
 
 	std::shared_ptr<Cheese> cheese = nullptr;
+
+	std::shared_ptr<Level> curLevel;
 };
 

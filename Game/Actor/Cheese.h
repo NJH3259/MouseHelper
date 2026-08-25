@@ -2,8 +2,14 @@
 
 #include <Actor/Actor.h>
 
-class Cheese : public Craft::Actor
+using namespace Craft;
+class Cheese : public Actor
 {
 	TYPE_DECLARATIONS(Cheese, Actor)
+
+public:
+	Cheese(const Vector2 position, Color color);
+
+private:
 };
 

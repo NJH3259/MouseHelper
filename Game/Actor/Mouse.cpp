@@ -1,6 +1,7 @@
 #include "Mouse.h"
 #include <Level/Level.h>
 #include <Util/Util.h>
+#include <Level/GameStage.h>
 
 #include <cassert>
 
@@ -12,6 +13,9 @@ Mouse::Mouse(const Vector2 position, Color color)
 	image = Util::LoadImageFromFile("Mouse.txt", "../Assets/");
 
 	//현재 레벨 객체의 FindActorInLevelWithType함수 사용
+	cheese = Cast<GameStage>(GetOwner())->FindActor<Cheese>("Cheese");
+	
+	assert(cheese && "cheese should not be null");
 
 	ResetStopedState();
 }
@@ -35,9 +39,8 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 //todo: 구현 필요
 void Mouse::MoveToCheese()
 {
-	//레벨 내 액터 중 목표(치즈)를 탐색한다. -> 목표는 움직이지 않으므로 처음 위치를 저장해두고 사용하기
 
-	//탐색에 성공하면 치즈를 향해 A* 알고리즘으로 최적 경로를 탐색한다.
+	//치즈를 향해 A* 알고리즘으로 최적 경로를 탐색한다.
 
 	//최적 경로를 따라 이동한다.
 }

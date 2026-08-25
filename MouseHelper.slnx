@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="CraftEngine/CraftEngine.vcxproj" />
+  <Project Path="Game/Game.vcxproj" />
+</Solution>

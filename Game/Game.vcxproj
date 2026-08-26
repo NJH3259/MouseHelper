@@ -101,13 +101,17 @@
     <ClCompile Include="Actor\Cat.cpp" />
     <ClCompile Include="Actor\Cheese.cpp" />
     <ClCompile Include="Actor\Mouse.cpp" />
+    <ClCompile Include="Actor\Player.cpp" />
+    <ClCompile Include="Level\Stage1.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Cat.h" />
     <ClInclude Include="Actor\Cheese.h" />
     <ClInclude Include="Actor\Mouse.h" />
+    <ClInclude Include="Actor\Player.h" />
     <ClInclude Include="Level\GameStage.h" />
+    <ClInclude Include="Level\Stage1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

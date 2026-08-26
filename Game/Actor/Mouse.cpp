@@ -12,8 +12,10 @@ Mouse::Mouse(const Vector2 position, Color color)
 {
 	image = Util::LoadImageFromFile("Mouse.txt", "../Assets/");
 
+	sortingOrder = 1;
+
 	//현재 레벨 객체의 FindActorInLevelWithType함수 사용
-	cheese = FindCheeseInLevel();
+	//cheese = FindCheeseInLevel();
 
 	isActorStoped = false;
 }
@@ -38,7 +40,7 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 //목표를 향해 A*알고리즘으로 길을 찾아가는 함수
 void Mouse::MoveToCheese()
 {
-	assert(cheese && "cheese should not be null");
+	//assert(cheese && "cheese should not be null");
 
 	//치즈를 향해 A* 알고리즘으로 최적 경로를 탐색한다.
 

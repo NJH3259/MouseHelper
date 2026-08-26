@@ -22,9 +22,14 @@ private:
 
 	void MoveToMouse();
 
+	Craft::Vector2 GetMousePosition();
+
 	std::shared_ptr<Mouse> FindMouseInLevel();
 
 private:
 	std::shared_ptr<Mouse> mouse = nullptr;
+
+	//플레이어에게 잡힌 상태인지 판단을 위한 플래그
+	bool isHolded = false;
 };
 

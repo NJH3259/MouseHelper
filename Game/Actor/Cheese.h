@@ -18,3 +18,5 @@ private:
 	virtual void OnCollision(const std::shared_ptr<Actor>& other) override;
 };
 
+//█ ░ ▒ ▓ -> 음영에 그릴 문자 (3번째 거만 출력됨)
+

@@ -15,5 +15,6 @@ private:
 	virtual void Tick(float deltaTime) override;
 
 private:
+	bool isHoldingCat = false;
 };
 

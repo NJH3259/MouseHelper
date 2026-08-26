@@ -55,14 +55,6 @@ namespace Craft {
 		assert(!instance && "instance should be null");
 		instance = this;
 
-		////콘솔 커서 안보이게 설정
-		//CONSOLE_CURSOR_INFO info;
-		//GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
-		//
-		////커서 보이기 옵션 false -> 윈도우 헤더에서 작성이므로 FALSE
-		//info.bVisible = FALSE;
-		//SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
-
 		//프레임 객체 생성
 		const int bufferCount = screenSize.x * screenSize.y;
 		frame = std::make_unique<Frame>(bufferCount);
@@ -87,14 +79,6 @@ namespace Craft {
 
 		//콘솔창 원래대로 복구
 		SetConsoleActiveScreenBuffer(GetStdHandle(STD_OUTPUT_HANDLE));
-
-		//렌더러 삭제 시 다시 커서 보이게 설정 복구
-		//CONSOLE_CURSOR_INFO info;
-		//GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
-		//
-		////커서 보이기 옵션 true -> 윈도우 헤더에서 작성이므로 TRUE
-		//info.bVisible = TRUE;
-		//SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 	}
 
 	void Renderer::Submit(const std::string & image, const Vector2 & position, const Color & color, int sortingOrder)
@@ -191,21 +175,6 @@ namespace Craft {
 				//그리기 우선순위 값 설정
 				frame->sortingOrderArray[index] = command.sortingOrder;
 			}
-
-			//윈도우 콘솔 핸들
-			//HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-			//
-			////그릴 위치로 이동(콘솔 좌표로 이동)
-			//SetConsoleCursorPosition(handle, command.position);
-			//
-			////글자 색상 설정
-			//SetConsoleTextAttribute(handle, static_cast<WORD>(command.color));
-			//
-			////그리기
-			//std::cout << command.img;
-			//
-			////콘솔 색상 복원
-			//SetConsoleTextAttribute(handle, static_cast<WORD>(Color::White));
 
 		}
 

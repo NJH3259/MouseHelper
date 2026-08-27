@@ -1,7 +1,7 @@
 #include "Mouse.h"
+#include <Actor/Cheese.h>
 #include <Level/Level.h>
 #include <Util/Util.h>
-#include <Level/GameStage.h>
 
 #include <cassert>
 
@@ -53,8 +53,8 @@ std::shared_ptr<Cheese> Mouse::FindCheeseInLevel()
 	std::shared_ptr<Cheese> cheese = nullptr;
 
 	//Level의 ActorList에서 Cheese 탐색
-	cheese = Cast<GameStage>(GetOwner())->FindActor<Cheese>("Cheese");
+	cheese = GetOwner()->FindActor<Cheese>();
 
 	assert(cheese && "Cheese should not be null");
-	return std::shared_ptr<Cheese>();
+	return cheese;
 }

@@ -2,7 +2,7 @@
 #include <Level/Level.h>
 #include <Render/Renderer.h>
 
-#include <cassert>s
+#include <cassert>
 #include <string>
 
 using namespace Craft;
@@ -18,7 +18,6 @@ void Player::Tick(float deltaTime)
 
 	if (Input::Get().GetKeyDown(VK_LBUTTON))
 	{
-		//-----------------------------------------------------------------------------------// 아래 코드 A* 구현 이후 주석 해제
 		//현재 마우스 커서 위치에 고양이 액터가 있는지 확인
 		//고양이 액터가 있으면
 		if (CheckCatOnPosition())
@@ -70,11 +69,13 @@ void Player::Tick(float deltaTime)
 		isHoldingCat = false;
 	}
 
+	//-------------------------------------------------test code----------------------------------------------//
 	//std::string actorPosition = "(" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")";
 	//Renderer::GetRenderer().Submit(actorPosition, Vector2(20, 20), Color::White, 5);
 
-	std::string isHoldingCatString = std::to_string(isHoldingCat);
-	Renderer::GetRenderer().Submit(isHoldingCatString, Vector2(20, 20), Color::White, 5);
+	//std::string isHoldingCatString = std::to_string(isHoldingCat);
+	//Renderer::GetRenderer().Submit(isHoldingCatString, Vector2(20, 20), Color::White, 5);
+	//-------------------------------------------------test code----------------------------------------------//
 }
 
 //레벨의 액터 리스트에서 현재 마우스 위치와 겹치는 액터가 있는지 검사

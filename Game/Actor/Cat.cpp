@@ -1,5 +1,6 @@
 ﻿#include "Cat.h"
-#include <Level/GameStage.h>
+#include <Level/Level.h>
+#include <Actor/Mouse.h>
 #include <Input/Input.h>
 #include <Util/Util.h>
 
@@ -9,6 +10,8 @@ Cat::Cat(const Craft::Vector2 position, Craft::Color color)
 	:Actor(" ", position, color)
 {
 	image = Util::LoadImageFromFile("Cat", "../Assets/");
+
+	sortingOrder = 1;
 
 	mouse = FindMouseInLevel();
 }
@@ -52,7 +55,7 @@ void Cat::MoveToMouse()
 //마우스 커서 위치를 받아서 고양이 위치를 이동시킬 함수
 Craft::Vector2 Cat::GetMousePosition()
 {
-	return Input::Get().GetMousePosition();
+	return Craft::Input::Get().GetMousePosition();
 }
 
 std::shared_ptr<Mouse> Cat::FindMouseInLevel()
@@ -60,9 +63,9 @@ std::shared_ptr<Mouse> Cat::FindMouseInLevel()
 	std::shared_ptr<Mouse> mouse = nullptr;
 	
 	//Level의 ActorList에서 Cheese 탐색
-	mouse = Cast<GameStage>(GetOwner())->FindActor<Mouse>("Mouse");
-	
-	assert(mouse && "Cheese should not be null");
+	mouse = GetOwner()->FindActor<Mouse>();
+
+	assert(mouse && "mouse should not be null");
 
 	return mouse;
 }

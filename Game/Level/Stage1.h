@@ -1,14 +1,14 @@
 #pragma once
 
-#include "GameStage.h"
+#include <Level/Level.h>
 #include <Math/Vector2.h>
 
-class Stage1 : public GameStage
+class Stage1 : public Craft::Level
 {
 private:
 	virtual void OnInitialized() override;
 
 private:
-	Vector2 position = (10, 10);
+	Craft::Vector2 position = (10, 10);
 };
 

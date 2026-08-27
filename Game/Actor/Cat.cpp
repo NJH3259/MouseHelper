@@ -37,7 +37,7 @@ void Cat::Draw()
 
 void Cat::OnCollision(const std::shared_ptr<Actor>&other)
 {
-	//게임 정지
+
 }
 
 //A* 알고리즘으로 쥐를 향해 이동하는 함수

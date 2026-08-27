@@ -44,9 +44,6 @@
     <ClInclude Include="Actor\Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Level\GameStage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Actor\Cheese.h">
       <Filter>Header Files</Filter>
     </ClInclude>

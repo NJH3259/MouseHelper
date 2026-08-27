@@ -75,6 +75,7 @@ void Player::Tick(float deltaTime)
 
 	//std::string isHoldingCatString = std::to_string(isHoldingCat);
 	//Renderer::GetRenderer().Submit(isHoldingCatString, Vector2(20, 20), Color::White, 5);
+	// 
 	//-------------------------------------------------test code----------------------------------------------//
 }
 

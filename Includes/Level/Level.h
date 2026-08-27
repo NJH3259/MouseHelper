@@ -99,6 +99,11 @@ namespace Craft
 			return hasInitialized;
 		}
 
+		inline void SetIsLevelStoped(bool state)
+		{
+			isLevelStoped = state;
+		}
+
 	protected:
 		//이전 프레임에 추가/제거 요청된 액터 처리 함수
 		void ProcessAddAndDestroyActors();
@@ -109,6 +114,8 @@ namespace Craft
 	protected:
 		//초기화 처리 여부 확인
 		bool hasInitialized = false;
+
+		bool isLevelStoped = false;
 
 		//레벨에 배치된 모든 액터
 		std::vector <std::shared_ptr<Actor>> actorList; //shared_ptr 소유권 이전이 가능한 unique_ptr

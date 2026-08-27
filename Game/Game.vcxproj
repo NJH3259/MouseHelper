@@ -114,7 +114,6 @@
     <ClInclude Include="Actor\Player.h" />
     <ClInclude Include="Algorithm\AStar.h" />
     <ClInclude Include="Algorithm\Node.h" />
-    <ClInclude Include="Level\GameStage.h" />
     <ClInclude Include="Level\Stage1.h" />
     <ClInclude Include="Util\Timer.h" />
   </ItemGroup>

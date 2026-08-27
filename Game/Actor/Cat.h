@@ -13,6 +13,8 @@ class Cat : public Craft::Actor
 public:
 	Cat(const Craft::Vector2 position, Craft::Color color);
 
+	inline void SetIsHolded() { isHolded != isHolded; }
+
 private:
 	virtual void Tick(float deltaTime) override;
 

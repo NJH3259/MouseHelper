@@ -64,5 +64,5 @@ std::shared_ptr<Mouse> Cat::FindMouseInLevel()
 	
 	assert(mouse && "Cheese should not be null");
 
-	return std::shared_ptr<Mouse>();
+	return mouse;
 }

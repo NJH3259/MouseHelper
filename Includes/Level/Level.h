@@ -75,6 +75,25 @@ namespace Craft
 			return nullptr;
 		}
 
+		//특정 타입의 액터 여러개를 vector로 반환하는 함수
+		template<typename T, typename = std::enable_if_t<std::is_base_of<Actor, T>::value>>
+		std::vector<std::shared_ptr<T>> FindSpecificActors()
+		{
+			std::vector<std::shared_ptr<T>> specificActorList;
+
+			for (const auto& actor : actorList)
+			{
+				//커스텀 RTTI를 이용한 동적 형변환
+				std::shared_ptr<T> currentActor = Cast<T>(actor);
+				if (currentActor)
+				{
+					specificActorList.emplace_back(currentActor);
+				}
+			}
+
+			return specificActorList;
+		}
+
 		//Getter
 		inline bool HasInitialized() const {
 			return hasInitialized;

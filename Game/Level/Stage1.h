@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Level/Level.h>
+#include <Level/StageLevel.h>
 #include <Math/Vector2.h>
 
-class Stage1 : public Craft::Level
+class Stage1 : public StageLevel
 {
 private:
 	virtual void OnInitialized() override;

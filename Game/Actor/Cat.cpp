@@ -9,11 +9,11 @@
 Cat::Cat(const Craft::Vector2 position, Craft::Color color)
 	:Actor(" ", position, color)
 {
-	image = Util::LoadImageFromFile("Cat", "../Assets/");
+	image = Util::LoadImageFromFile("Cat.txt", "../Assets/");
 
 	sortingOrder = 1;
 
-	mouse = FindMouseInLevel();
+	isActorStoped = false;
 }
 
 void Cat::Tick(float deltaTime)
@@ -21,6 +21,11 @@ void Cat::Tick(float deltaTime)
 	Actor::Tick(deltaTime);
 
 	IsActorStoped();
+
+	if (!mouse) {
+		mouse = FindMouseInLevel();
+	}
+
 
 	if(!isHolded)
 	{
@@ -31,9 +36,6 @@ void Cat::Tick(float deltaTime)
 		position = GetMousePosition();
 	}
 }
-
-void Cat::Draw()
-{}
 
 void Cat::OnCollision(const std::shared_ptr<Actor>&other)
 {
@@ -62,7 +64,7 @@ std::shared_ptr<Mouse> Cat::FindMouseInLevel()
 {
 	std::shared_ptr<Mouse> mouse = nullptr;
 	
-	//Level의 ActorList에서 Cheese 탐색
+	//Level의 ActorList에서 Mouse 탐색
 	mouse = GetOwner()->FindActor<Mouse>();
 
 	assert(mouse && "mouse should not be null");

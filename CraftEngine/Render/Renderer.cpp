@@ -36,7 +36,7 @@ namespace Craft {
 				//빈문자 설정 - 기존 설정 값 지우기
 				info.Char.AsciiChar = ' ';
 				//색상 표기 안함
-				info.Attributes = 0;
+				info.Attributes = static_cast<WORD>(Color::B_Green);
 
 				//그리기 순서 배열 항목 초기화
 				sortingOrderArray[index] = -1;
@@ -147,6 +147,10 @@ namespace Craft {
 					xOffset++;
 				}
 
+				// 2. 현재 그리려는 문자의 화면 좌표 계산 (Offset 반영)
+				int targetX = command.position.x + xOffset;
+				int targetY = command.position.y + yOffset;
+
 				if (0 > (command.position.y + yOffset) || (command.position.y + yOffset) > screenSize.y)
 				{
 					continue;
@@ -193,6 +197,16 @@ namespace Craft {
 					continue;
 				}
 
+				else if (command.img[sourceIndex] == '&')
+				{
+					frame->charInfoArray[index].Char.AsciiChar = ' ';
+
+					frame->charInfoArray[index].Attributes = static_cast<WORD>(Color::B_Red);
+
+					//그리기 우선순위 값 설정
+					frame->sortingOrderArray[index] = command.sortingOrder;
+				}
+
 				else
 				{
 					//2차원 배열에 글자, 속성 설정
@@ -227,6 +241,7 @@ namespace Craft {
 		//One Minus 공식: 1 -> 0 -> 1 -> 0 -> ...
 		currentBufferIndex = 1 - currentBufferIndex;
 	}
+
 	const ScreenBuffer* const Renderer::GetCurrentBuffer() const
 	{
 		return screenBufferArray[currentBufferIndex].get();

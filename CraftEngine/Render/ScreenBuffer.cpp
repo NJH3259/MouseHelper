@@ -13,8 +13,24 @@ namespace Craft {
 			CONSOLE_TEXTMODE_BUFFER,
 			nullptr);
 
+		COORD large = GetLargestConsoleWindowSize(buffer);
 		//값 확인
 		assert(buffer != INVALID_HANDLE_VALUE);
+
+		//폰트 크기 설정
+		//CONSOLE_FONT_INFOEX cfi = { sizeof(CONSOLE_FONT_INFOEX) };
+		//GetCurrentConsoleFontEx(buffer, FALSE, &cfi);
+		//COORD fontSize = cfi.dwFontSize;
+		//
+		//cfi.dwFontSize.X = 8;
+		//cfi.dwFontSize.Y = 8;
+		//
+		//BOOL result = SetCurrentConsoleFontEx(buffer, NULL, &cfi);
+		//assert(result == TRUE);
+
+		//화면 버퍼 크기 설정
+		BOOL result = SetConsoleScreenBufferSize(buffer, size);
+		assert(result == TRUE);
 
 		//화면 창 크기 설정
 		SMALL_RECT rect = {};
@@ -22,7 +38,7 @@ namespace Craft {
 		rect.Left = 0;
 		rect.Right = static_cast<short>(size.x - 1);
 		rect.Bottom = static_cast<short>(size.y - 1);
-		BOOL result =
+		result =
 			SetConsoleWindowInfo(
 				buffer,
 				TRUE, //창의 크기를 새로 지정할 것인가
@@ -31,10 +47,7 @@ namespace Craft {
 		//결과 확인
 		assert(result == TRUE);
 
-		//화면 버퍼 크기 설정
-		result = SetConsoleScreenBufferSize(buffer, size);
-		assert(result == TRUE);
-
+		//todo:폰트 크기 조절
 		//직접 만든 콘솔의 커서 끄기
 		CONSOLE_CURSOR_INFO info;
 		GetConsoleCursorInfo(buffer, &info);

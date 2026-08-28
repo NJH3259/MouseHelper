@@ -38,8 +38,13 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 	if (Cast<Cat>(other))
 	{
 		GetOwner()->SetIsLevelStoped(true);
-		//todo: 다른 액터간의 충돌 구현
-		//todo: 레벨 정지 시 풀 수 있는 키 입력 구현(레벨 내에 구현할 것)
+		//todo: 레벨 실패 처리
+	}
+	//충돌한 액터 타입이 Cheese인 경우
+	else if (Cast<Cheese>(other))
+	{
+		GetOwner()->SetIsLevelStoped(true);
+		//todo: 레벨 클리어 처리
 	}
 }
 

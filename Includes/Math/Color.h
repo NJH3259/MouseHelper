@@ -15,11 +15,9 @@ namespace Craft
 		Cyan = Green | Blue,
 		Purple = Red | Blue,
 		White = Red | Green | Blue,
-		BrightWhite = White | FOREGROUND_INTENSITY
-	};
+		BrightWhite = White | FOREGROUND_INTENSITY,
 
-	enum class CRAFT_API B_Color :WORD
-	{
+		//배경색
 		B_Red = BACKGROUND_RED,
 		B_Green = BACKGROUND_GREEN,
 		B_Blue = BACKGROUND_BLUE,

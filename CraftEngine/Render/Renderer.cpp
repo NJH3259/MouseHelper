@@ -36,7 +36,7 @@ namespace Craft {
 				//빈문자 설정 - 기존 설정 값 지우기
 				info.Char.AsciiChar = ' ';
 				//색상 표기 안함
-				info.Attributes = 0;
+				info.Attributes = static_cast<WORD>(Color::B_Green);
 
 				//그리기 순서 배열 항목 초기화
 				sortingOrderArray[index] = -1;
@@ -54,14 +54,6 @@ namespace Craft {
 	{
 		assert(!instance && "instance should be null");
 		instance = this;
-
-		////콘솔 커서 안보이게 설정
-		//CONSOLE_CURSOR_INFO info;
-		//GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
-		//
-		////커서 보이기 옵션 false -> 윈도우 헤더에서 작성이므로 FALSE
-		//info.bVisible = FALSE;
-		//SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 
 		//프레임 객체 생성
 		const int bufferCount = screenSize.x * screenSize.y;
@@ -87,14 +79,6 @@ namespace Craft {
 
 		//콘솔창 원래대로 복구
 		SetConsoleActiveScreenBuffer(GetStdHandle(STD_OUTPUT_HANDLE));
-
-		//렌더러 삭제 시 다시 커서 보이게 설정 복구
-		//CONSOLE_CURSOR_INFO info;
-		//GetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
-		//
-		////커서 보이기 옵션 true -> 윈도우 헤더에서 작성이므로 TRUE
-		//info.bVisible = TRUE;
-		//SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
 	}
 
 	void Renderer::Submit(const std::string & image, const Vector2 & position, const Color & color, int sortingOrder)
@@ -145,36 +129,40 @@ namespace Craft {
 				continue;
 			}
 
-			//y위치가 화면을 벗어났으면 건너뛰기, y는 한줄이라는 전재
-			if (command.position.y < 0 || command.position.y >= screenSize.y) {
-				continue;
-			}
+			//이미지 출력할 때 위치 인덱스를 계산하기 위한 변수
+			int xOffset = 0;
+			int yOffset = 0;
 
-			//그리려는 문자열 길이 값
-			const int length = static_cast<int>(command.img.length());
+			//문자열의 문자를 순회하면서 개행문자 탐색 및 인덱스 계산 알맞게 그림 그리기
+			for (int sourceIndex = 0; sourceIndex < command.img.length(); ++sourceIndex) 
+			{
+				//이미지 중 문자가 개행 문자일시 yOffset + 1하고 그리지 않음
+				if (command.img[sourceIndex] == '\n')
+				{
+					yOffset++;
+					xOffset = 0;
+					continue;
+				}
 
-			//글자의 시작 위치와 끝 위치
-			//문자열 가장 왼쪽이 액터의 중심 위치
-			const int startX = command.position.x;
-			const int endX = startX + length - 1;
+				// 2. 현재 그리려는 문자의 화면 좌표 계산 (Offset 반영)
+				int targetX = command.position.x + xOffset;
+				int targetY = command.position.y + yOffset;
 
-			//x 위치가 화면을 벗어났는지 확인
-			if (endX < 0 || startX >= screenSize.x) {
-				continue;
-			}
-
-			//실제 그릴 글자의 위치 구하기
-			const int visibleStart = startX < 0 ? 0 : startX;
-			const int visibleEnd = endX > screenSize.x >= screenSize.x ? screenSize.x - 1 : endX;
-
-			//문자열을 루프 순회하면서 글자를 2차원 배열에 하나씩 기록
-			for (int x = visibleStart; x <= visibleEnd; ++x) {
-				//문자열에서 글자값을 가져올 때 사용한 인덱스
-				const int sourceIndex = x - startX;
+				if (0 > (command.position.y + yOffset) || (command.position.y + yOffset) > screenSize.y)
+				{
+					continue;
+				}
+				if (0 > (command.position.x + xOffset) || (command.position.x + xOffset) > screenSize.x)
+				{
+					continue;
+				}
 
 				//글자 2차원 배열의 인덱스
 				//y*width + x
-				const int index = (command.position.y * screenSize.x) + x;
+				const int index = ((command.position.y + yOffset) * screenSize.x) + command.position.x + xOffset;
+
+				//개행 문자가 아닌경우 x축 방향으로 다음 칸으로 이동
+				++xOffset;
 
 				//정렬 순서를 비교해서 그릴지 말지 판정
 				//이미 그려진 값이 우선순위가 높으면 건너뛰기
@@ -182,30 +170,49 @@ namespace Craft {
 					continue;
 				}
 
-				//2차원 배열에 글자, 속성 설정
-				frame->charInfoArray[index].Char.AsciiChar = command.img[sourceIndex];
+				if (command.img[sourceIndex] == '@')
+				{
+					//2차원 배열에 글자, 속성 설정
+					frame->charInfoArray[index].Char.AsciiChar = ' ';
 
-				//글자 색상 설정
-				frame->charInfoArray[index].Attributes = static_cast<DWORD>(command.color);
+					frame->charInfoArray[index].Attributes = static_cast<WORD>(Color::B_Blue);
 
-				//그리기 우선순위 값 설정
-				frame->sortingOrderArray[index] = command.sortingOrder;
+					//그리기 우선순위 값 설정
+					frame->sortingOrderArray[index] = command.sortingOrder;
+				}
+				
+				else if (command.img[sourceIndex] == '.')
+				{
+					frame->charInfoArray[index].Char.AsciiChar = ' ';
+
+					frame->charInfoArray[index].Attributes = static_cast<WORD>(Color::B_Green);
+
+					//그리기 우선순위 값 설정
+					frame->sortingOrderArray[index] = command.sortingOrder;
+				}
+
+				else if (command.img[sourceIndex] == '&')
+				{
+					frame->charInfoArray[index].Char.AsciiChar = ' ';
+
+					frame->charInfoArray[index].Attributes = static_cast<WORD>(Color::B_Red);
+
+					//그리기 우선순위 값 설정
+					frame->sortingOrderArray[index] = command.sortingOrder;
+				}
+
+				else
+				{
+					//2차원 배열에 글자, 속성 설정
+					frame->charInfoArray[index].Char.AsciiChar = command.img[sourceIndex];
+				
+					//글자 색상 설정
+					frame->charInfoArray[index].Attributes = static_cast<DWORD>(command.color);
+				
+					//그리기 우선순위 값 설정
+					frame->sortingOrderArray[index] = command.sortingOrder;
+				}
 			}
-
-			//윈도우 콘솔 핸들
-			//HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-			//
-			////그릴 위치로 이동(콘솔 좌표로 이동)
-			//SetConsoleCursorPosition(handle, command.position);
-			//
-			////글자 색상 설정
-			//SetConsoleTextAttribute(handle, static_cast<WORD>(command.color));
-			//
-			////그리기
-			//std::cout << command.img;
-			//
-			////콘솔 색상 복원
-			//SetConsoleTextAttribute(handle, static_cast<WORD>(Color::White));
 
 		}
 
@@ -228,6 +235,7 @@ namespace Craft {
 		//One Minus 공식: 1 -> 0 -> 1 -> 0 -> ...
 		currentBufferIndex = 1 - currentBufferIndex;
 	}
+
 	const ScreenBuffer* const Renderer::GetCurrentBuffer() const
 	{
 		return screenBufferArray[currentBufferIndex].get();

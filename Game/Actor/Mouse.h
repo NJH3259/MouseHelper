@@ -1,10 +1,7 @@
 #pragma once
 
 #include <Actor/Actor.h>
-#include <Math/Vector2.h>
-#include <Math/Color.h>
 
-#include <string>
 #include <memory>
 
 class Cheese;
@@ -26,12 +23,6 @@ private:
 	std::shared_ptr<Cheese> FindCheeseInLevel();
 
 private:
-	Craft::Vector2 position = Craft::Vector2(0, 0);
-
-	std::string image;
-
-	bool isGameStoped = false;
-
 	std::shared_ptr<Cheese> cheese = nullptr;
 };
 

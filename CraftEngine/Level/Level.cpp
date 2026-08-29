@@ -2,7 +2,9 @@
 
 namespace Craft {
 	Level::Level()
-	{}
+	{
+		isLevelStoped = false;
+	}
 
 	Level::~Level()
 	{}
@@ -28,6 +30,11 @@ namespace Craft {
 
 	void Level::Tick(float deltaTime)
 	{
+		if (isLevelStoped)
+		{
+			return;
+		}
+
 		for (const std::shared_ptr<Actor>& actor : actorList) {
 			
 			if (!actor->IsActive()) {

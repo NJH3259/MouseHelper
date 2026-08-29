@@ -1,4 +1,6 @@
 #include "Mouse.h"
+#include <Actor/Cheese.h>
+#include <Actor/Cat.h>
 #include <Level/Level.h>
 #include <Util/Util.h>
 
@@ -11,9 +13,12 @@ Mouse::Mouse(const Vector2 position, Color color)
 {
 	image = Util::LoadImageFromFile("Mouse.txt", "../Assets/");
 
-	//현재 레벨 객체의 FindActorInLevelWithType함수 사용
+	sortingOrder = 1;
 
-	ResetStopedState();
+	//현재 레벨 객체의 FindActorInLevelWithType함수 사용
+	//cheese = FindCheeseInLevel();
+
+	isActorStoped = false;
 }
 
 void Mouse::Tick(float deltaTime)
@@ -29,25 +34,39 @@ void Mouse::Tick(float deltaTime)
 
 void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 {
-	isActorStoped = true;
+	//충돌한 액터 타입이 Cat인 경우
+	if (Cast<Cat>(other))
+	{
+		GetOwner()->SetIsLevelStoped(true);
+		//todo: 레벨 실패 처리
+	}
+	//충돌한 액터 타입이 Cheese인 경우
+	else if (Cast<Cheese>(other))
+	{
+		GetOwner()->SetIsLevelStoped(true);
+		//todo: 레벨 클리어 처리
+	}
 }
 
 //todo: 구현 필요
+//목표를 향해 A*알고리즘으로 길을 찾아가는 함수
 void Mouse::MoveToCheese()
 {
-	//레벨 내 액터 중 목표(치즈)를 탐색한다. -> 목표는 움직이지 않으므로 처음 위치를 저장해두고 사용하기
+	//assert(cheese && "cheese should not be null");
 
-	//탐색에 성공하면 치즈를 향해 A* 알고리즘으로 최적 경로를 탐색한다.
+	//치즈를 향해 A* 알고리즘으로 최적 경로를 탐색한다.
 
 	//최적 경로를 따라 이동한다.
 }
 
+//Actor를 소유한 레벨의 액터 목록에서 특정 타입의 액터를 가져와 반환
 std::shared_ptr<Cheese> Mouse::FindCheeseInLevel()
 {
 	std::shared_ptr<Cheese> cheese = nullptr;
 
 	//Level의 ActorList에서 Cheese 탐색
+	cheese = GetOwner()->FindActor<Cheese>();
 
 	assert(cheese && "Cheese should not be null");
-	return std::shared_ptr<Cheese>();
+	return cheese;
 }

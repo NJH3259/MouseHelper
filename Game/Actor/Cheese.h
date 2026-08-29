@@ -11,9 +11,5 @@ public:
 	Cheese(const Vector2 position, Color color);
 
 private:
-	virtual void Tick(float deltaTime) override;
-
-	virtual void Draw() override;
-
 	virtual void OnCollision(const std::shared_ptr<Actor>& other) override;
 };

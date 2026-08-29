@@ -28,7 +28,7 @@ void Player::Tick(float deltaTime)
 			isHoldingCat = true;
 			
 			//고양이 Actor가 잡힌 상태를 true로 변경 -> 고양이 액터 내부 Tick에서 플래그에 따라 로직 변화(플레이어 마우스 따라가도록 변경)
-			currentCat->SetIsHolded();
+			currentCat->SetIsHoldedState();
 		}
 	}
 
@@ -58,7 +58,7 @@ void Player::Tick(float deltaTime)
 		//고양이 액터 내부의 잡힘 상태 해제
 		if(currentCat)
 		{
-			currentCat->SetIsHolded();
+			currentCat->ReleaseIsHoldedState();
 		}
 
 		//현재 마우스 위치를 집은 고양이 액터 위치로 지정 -> 고양이의 Tick()에서 실행 중
@@ -91,7 +91,10 @@ bool Player::CheckCatOnPosition()
 	for (const auto& cat : catList)
 	{
 		//Cat의 position 범위(position ~ position+size)내에 있으면
-		if (cat->GetPosition() == position)
+		Vector2 catPos = cat->GetPosition();
+		Vector2 catSize = cat->GetImageSize();
+
+		if (CheckMouseInImage(catPos, catSize, position))
 		{
 			//currentCat에 해당 Cat 대입
 			currentCat = cat;
@@ -101,4 +104,18 @@ bool Player::CheckCatOnPosition()
 
 	//없으면 false 반환
 	return false;
+}
+
+bool Player::CheckMouseInImage(Vector2 catPos, Vector2 catImageSize, Vector2 mousePosition)
+{
+	if (mousePosition.x < catPos.x || mousePosition.x > catPos.x + catImageSize.x) {
+		return false;
+	}
+
+	if (mousePosition.y < catPos.y || mousePosition.y > catPos.y + catImageSize.y)
+	{
+		return false;
+	}
+
+	return true;
 }

@@ -11,7 +11,7 @@ using namespace Craft;
 Mouse::Mouse(const Vector2 position, Color color)
 	:Actor(" ", position, color)
 {
-	image = Util::LoadImageFromFile("Mouse.txt", "../Assets/");
+	ChangeImage(Util::LoadImageFromFile("Mouse.txt", "../Assets/"));
 
 	sortingOrder = 1;
 

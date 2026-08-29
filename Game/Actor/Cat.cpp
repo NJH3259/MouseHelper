@@ -6,10 +6,12 @@
 
 #include<cassert>
 
-Cat::Cat(const Craft::Vector2 position, Craft::Color color)
+using namespace Craft;
+
+Cat::Cat(const Vector2 position, Color color)
 	:Actor(" ", position, color)
 {
-	image = Util::LoadImageFromFile("Cat.txt", "../Assets/");
+	ChangeImage(Util::LoadImageFromFile("Cat.txt", "../Assets/"));
 
 	sortingOrder = 1;
 
@@ -29,11 +31,18 @@ void Cat::Tick(float deltaTime)
 
 	if(!isHolded)
 	{
+		isSetOffset = false;
 		MoveToMouse();
 	}
 	else
 	{
-		position = GetMousePosition();
+		if (!isSetOffset)
+		{
+			curOffset = CalculateOffset(GetMousePosition());
+			isSetOffset = true;
+		}
+
+		position = GetMousePosition() - curOffset;
 	}
 }
 
@@ -57,7 +66,7 @@ void Cat::MoveToMouse()
 //마우스 커서 위치를 받아서 고양이 위치를 이동시킬 함수
 Craft::Vector2 Cat::GetMousePosition()
 {
-	return Craft::Input::Get().GetMousePosition();
+	return Input::Get().GetMousePosition();
 }
 
 std::shared_ptr<Mouse> Cat::FindMouseInLevel()
@@ -70,4 +79,16 @@ std::shared_ptr<Mouse> Cat::FindMouseInLevel()
 	assert(mouse && "mouse should not be null");
 
 	return mouse;
+}
+
+//고양이가 플레이어에게 잡힌 경우 마우스 커서를 따라가도록 함
+Vector2 Cat::CalculateOffset(Vector2 mousePosition)
+{
+
+	int offsetX = mousePosition.x - position.x;
+	int offsetY = mousePosition.y - position.y;
+
+	Vector2 offset = Vector2(offsetX, offsetY);
+
+	return offset;
 }

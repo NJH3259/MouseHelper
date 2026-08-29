@@ -4,7 +4,7 @@
 
 namespace Craft {
 	Actor::Actor(const std::string& image, const Vector2& position, Color color)
-		: image(image), position(position), color(color), width(static_cast<int>(image.length()))
+		: image(image), position(position), color(color), imageSize(Vector2(0, 0))
 	{}
 
 	Actor::~Actor()

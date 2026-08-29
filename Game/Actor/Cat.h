@@ -13,7 +13,8 @@ class Cat : public Craft::Actor
 public:
 	Cat(const Craft::Vector2 position, Craft::Color color);
 
-	inline void SetIsHolded() { isHolded != isHolded; }
+	inline void SetIsHoldedState() { isHolded = true; }
+	inline void ReleaseIsHoldedState() { isHolded = false; }
 
 private:
 	virtual void Tick(float deltaTime) override;
@@ -26,10 +27,17 @@ private:
 
 	std::shared_ptr<Mouse> FindMouseInLevel();
 
+	Craft::Vector2 CalculateOffset(Craft::Vector2 mousePosition);
+
 private:
 	std::shared_ptr<Mouse> mouse = nullptr;
 
 	//플레이어에게 잡힌 상태인지 판단을 위한 플래그
 	bool isHolded = false;
+
+	//플레이어에게 잡힌 경우 오프셋 계산을 한 번만 진행하기 위한 플래그
+	bool isSetOffset = false;
+
+	Craft::Vector2 curOffset = (0, 0);
 };
 

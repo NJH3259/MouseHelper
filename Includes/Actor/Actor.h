@@ -71,11 +71,28 @@ namespace Craft
 		inline void SavePreviousState() { previousPosition = position; }
 
 		//너비 반환 함수
-		inline int GetWidth() const { return width; }
+		inline int GetWidth() const { return imageSize.x; }
+		inline int GetHeight() const { return imageSize.y; }
+		inline Vector2 GetImageSize() const{ return imageSize; }
 
 		inline void ChangeImage(const std::string& newImage) {
-			//이미지 길이 설정
-			width = static_cast<int>(newImage.length());
+			//이미지의 가로와 세로 길이 구하기. 단 이미지는 정사각형이어야 함
+			int newWidth = 0;
+			int newHeight = 1;
+			for (const char c : newImage)
+			{
+				if (c == '\n')
+				{
+					++newHeight;
+				}
+				else
+				{
+					++newWidth;
+				}
+			}
+
+			imageSize.x = newWidth / newHeight;
+			imageSize.y = newHeight;
 
 			//새로운 글자 값 설정
 			image = newImage;
@@ -110,7 +127,7 @@ namespace Craft
 		Color color = Color::White;
 
 		//글자 길이
-		int width = 0;
+		Vector2 imageSize = (0, 0);
 
 		//렌더링 순서
 		int sortingOrder = 0;

@@ -9,7 +9,7 @@ private:
 	virtual void OnInitialized() override;
 
 private:
-	Craft::Vector2 position = (10, 10);
-	Craft::Vector2 catPos = (40, 20);
+	Craft::Vector2 position = Craft::Vector2(20, 20);
+	Craft::Vector2 catPos = Craft::Vector2(40, 20);
 };
 

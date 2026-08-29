@@ -136,15 +136,12 @@ namespace Craft {
 			//문자열의 문자를 순회하면서 개행문자 탐색 및 인덱스 계산 알맞게 그림 그리기
 			for (int sourceIndex = 0; sourceIndex < command.img.length(); ++sourceIndex) 
 			{
-				//이미지 중 문자가 개행 문자일시 yOffset + 1
+				//이미지 중 문자가 개행 문자일시 yOffset + 1하고 그리지 않음
 				if (command.img[sourceIndex] == '\n')
 				{
 					yOffset++;
 					xOffset = 0;
-				}
-				else
-				{
-					xOffset++;
+					continue;
 				}
 
 				// 2. 현재 그리려는 문자의 화면 좌표 계산 (Offset 반영)
@@ -163,6 +160,9 @@ namespace Craft {
 				//글자 2차원 배열의 인덱스
 				//y*width + x
 				const int index = ((command.position.y + yOffset) * screenSize.x) + command.position.x + xOffset;
+
+				//개행 문자가 아닌경우 x축 방향으로 다음 칸으로 이동
+				++xOffset;
 
 				//정렬 순서를 비교해서 그릴지 말지 판정
 				//이미 그려진 값이 우선순위가 높으면 건너뛰기
@@ -189,12 +189,6 @@ namespace Craft {
 
 					//그리기 우선순위 값 설정
 					frame->sortingOrderArray[index] = command.sortingOrder;
-				}
-
-				//개행 문자는 그리지 않고 연산만 진행
-				else if (command.img[sourceIndex] == '\n')
-				{
-					continue;
 				}
 
 				else if (command.img[sourceIndex] == '&')

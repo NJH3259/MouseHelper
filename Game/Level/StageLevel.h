@@ -3,14 +3,20 @@
 #include <Level/Level.h>
 #include <Input/Input.h>
 #include <Util/Timer.h>
+#include <Render/Renderer.h>
 
 using namespace Craft;
 class StageLevel : public Level
 {
+public:
+	bool GetDebugMod() { return isDebugMod; }
+
 protected:
 	virtual void OnInitialized() override
 	{
 		Level::OnInitialized();
+
+		isDebugMod = false;
 
 		startTimer.Reset();
 
@@ -24,7 +30,7 @@ protected:
 	{
 		startTimer.Tick(deltaTime);
 
-		WaitStartDelay();
+		WaitStartDelay(deltaTime);
 
 		Level::Tick(deltaTime);
 
@@ -40,9 +46,15 @@ protected:
 			ResetLevel();
 			
 		}
+
+		if (Input::Get().GetKeyDown('D'))
+		{
+			//todo: 디버그 모드 구현
+			isDebugMod = !isDebugMod;
+		}
 	}
 
-	void WaitStartDelay()
+	void WaitStartDelay(float deltaTime)
 	{
 		if (!isLevelStarted)
 		{
@@ -51,6 +63,8 @@ protected:
 				isLevelStoped = false;
 				isLevelStarted = true;
 			}
+			std::string leftTimeString = "Until Start: " + std::to_string(static_cast<int>(startDelay - startTimer.GetElapsedTime()) + 1);
+			Renderer::GetRenderer().Submit(leftTimeString, Vector2(0, 2));
 		}
 	}
 
@@ -63,4 +77,6 @@ private:
 	float startDelay = 3.0f;
 
 	bool isLevelStarted = false;
+
+	bool isDebugMod = false;
 };

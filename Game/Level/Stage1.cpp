@@ -10,4 +10,5 @@ void Stage1::OnInitialized()
 	SpawnActor<Player>();
 	SpawnActor<Mouse>(position, Craft::Color::White);
 	SpawnActor<Cat>(catPos, Craft::Color::White);
+	SpawnActor<Cat>(Craft::Vector2(60,40), Craft::Color::White);
 }

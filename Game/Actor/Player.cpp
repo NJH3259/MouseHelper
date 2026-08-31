@@ -108,11 +108,11 @@ bool Player::CheckCatOnPosition()
 
 bool Player::CheckMouseInImage(Vector2 catPos, Vector2 catImageSize, Vector2 mousePosition)
 {
-	if (mousePosition.x < catPos.x || mousePosition.x > catPos.x + catImageSize.x) {
+	if (mousePosition.x < catPos.x || mousePosition.x > catPos.x + catImageSize.x - 1) {
 		return false;
 	}
 
-	if (mousePosition.y < catPos.y || mousePosition.y > catPos.y + catImageSize.y)
+	if (mousePosition.y < catPos.y || mousePosition.y > catPos.y + catImageSize.y - 1)
 	{
 		return false;
 	}

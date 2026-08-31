@@ -11,6 +11,9 @@ class StageLevel : public Level
 public:
 	bool GetDebugMod() { return isDebugMod; }
 
+	virtual void ResetLevel()
+	{}
+
 protected:
 	virtual void OnInitialized() override
 	{
@@ -67,9 +70,6 @@ protected:
 			Renderer::GetRenderer().Submit(leftTimeString, Vector2(0, 2));
 		}
 	}
-
-	virtual void ResetLevel()
-	{}
 
 private:
 	Timer startTimer;

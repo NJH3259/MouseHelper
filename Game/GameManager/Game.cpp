@@ -1,12 +1,12 @@
 #include "Game.h"
-#include <Level/Stage1.h>
+#include <Level/StageLevel.h>
 
 #include <memory>
 
 Game::Game()
 {
-	// 두 레벨 생성 및 배열에 추가.
-	levelList.emplace_back(std::make_shared<Stage1>());
+	//레벨 생성 및 배열에 추가.
+	//levelList.emplace_back(std::make_shared<Stage1>());
 
 	// 시작 상태 설정.
 	state = State::Title;
@@ -33,6 +33,11 @@ void Game::ResetGameLevel()
 //리셋 실행 로직은 Game에서 책임을 갖도록 private으로 감추기
 void Game::ReInitilizeGameLevel()
 {
-	std::shared_ptr<Stage1> testLevel = std::dynamic_pointer_cast<Stage1>(levelList[1]);
+	//std::shared_ptr<Stage1> testLevel = std::dynamic_pointer_cast<Stage1>(levelList[1]);
 	//testLevel->ResetLevel();
+	std::shared_ptr<StageLevel> currentLevel = std::dynamic_pointer_cast<StageLevel>(mainLevel);
+	if (currentLevel)
+	{
+		currentLevel->ResetLevel();
+	}
 }

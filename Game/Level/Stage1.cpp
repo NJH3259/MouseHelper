@@ -5,10 +5,21 @@
 
 void Stage1::OnInitialized()
 {
-	Level::OnInitialized();
+	StageLevel::OnInitialized();
 
 	SpawnActor<Player>();
 	SpawnActor<Mouse>(position, Craft::Color::White);
-	SpawnActor<Cat>(catPos, Craft::Color::White);
-	SpawnActor<Cat>(Craft::Vector2(60,40), Craft::Color::White);
+	SpawnActor<Cat>(catPos1, Craft::Color::White);
+	SpawnActor<Cat>(catPos2, Craft::Color::White);
+}
+
+void Stage1::ResetLevel()
+{
+	StageLevel::ResetLevel();
+
+	hasInitialized = false;
+
+	actorList.clear();
+
+	OnInitialized();
 }

@@ -1,15 +1,18 @@
 #pragma once
 
-#include <Level/Level.h>
+#include <Level/StageLevel.h>
 #include <Math/Vector2.h>
 
-class Stage1 : public Craft::Level
+class Stage1 : public StageLevel
 {
 private:
 	virtual void OnInitialized() override;
 
+	virtual void ResetLevel() override;
+
 private:
 	Craft::Vector2 position = Craft::Vector2(20, 20);
-	Craft::Vector2 catPos = Craft::Vector2(40, 20);
+	Craft::Vector2 catPos1 = Craft::Vector2(40, 20);
+	Craft::Vector2 catPos2 = Craft::Vector2(60, 40);
 };
 

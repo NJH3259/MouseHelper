@@ -6,15 +6,11 @@ class Node
 {
 public:
 	Node(Craft::Vector2 position, Node* parentNode = nullptr)
-		:position(position), gCost(0.0f), hCost(0.0f), fCost(0.0f), parentNode(parentNode)
+		:position(position), parentNode(parentNode)
 	{
 	}
 
-	~Node()
-	{
-	}
-
-private:
+public:
 	Craft::Vector2 position;
 
 	float gCost = 0.0f;

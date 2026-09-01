@@ -1,11 +1,12 @@
 ﻿#include "Cat.h"
-#include <Level/Level.h>
+#include <Level/StageLevel.h>
 #include <Actor/Mouse.h>
 #include <Input/Input.h>
 #include <Util/Util.h>
 #include <Render/Renderer.h>
 
 #include<cassert>
+#include <memory>
 
 using namespace Craft;
 
@@ -44,8 +45,12 @@ void Cat::Tick(float deltaTime)
 		}
 
 		position = GetMousePosition() - curOffset;
-		std::string currentPos = "잡힌 고양이의 위치: (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")";
-		Renderer::GetRenderer().Submit(currentPos, Vector2(0, 0));
+
+		if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+		{
+			std::string currentPos = "잡힌 고양이의 위치: (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")";
+			Renderer::GetRenderer().Submit(currentPos, Vector2(0, 0));
+		}
 	}
 }
 

@@ -163,11 +163,11 @@ namespace Craft {
 
 						if (tileType == 1) { // 벽
 							info.Char.AsciiChar = ' ';
-							info.Attributes = static_cast<WORD>(Color::B_Blue);
+							info.Attributes = static_cast<WORD>(Color::B_White);
 						}
 						else if (tileType == 0) { // 바닥
 							info.Char.AsciiChar = ' ';
-							info.Attributes = static_cast<WORD>(Color::B_Green);
+							info.Attributes = 0;
 						}
 						else if (tileType == 2) { // A* 경로
 							info.Char.AsciiChar = '.';

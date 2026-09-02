@@ -13,9 +13,7 @@ void Stage1::OnInitialized()
 {
 	StageLevel::OnInitialized();
 
-	std::vector<std::vector<int>> grid = Util::LoadMapAsGrid("../Assets/Stage1.txt");
-
-	Renderer::GetRenderer().SubmitTilemap(grid);
+	grid = Util::LoadMapAsGrid("../Assets/Stage1.txt");
 
 	SpawnActor<Player>();
 	SpawnActor<Mouse>(position, Craft::Color::White);
@@ -32,4 +30,11 @@ void Stage1::ResetLevel()
 	actorList.clear();
 
 	OnInitialized();
+}
+
+void Stage1::Tick(float deltaTime)
+{
+	StageLevel::Tick(deltaTime);
+
+	Renderer::GetRenderer().SubmitTilemap(grid);
 }

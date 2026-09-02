@@ -15,11 +15,20 @@ private:
 		float cost = 0.0f;
 	};
 
+	enum class TileType : char
+	{
+		Ground = 0,
+		Wall = 1,
+		Start = 2,
+		Goal = 3,
+		Visited = 4
+	};
+
 public:
 	AStar();
 	~AStar();
 
-	std::vector<Vector2> FindPath(Vector2 startPos, Vector2 destinationPos);
+	std::vector<Vector2> FindPath(const Vector2 startPos, const Vector2 destinationPos, std::vector<std::vector<int>>& grid);
 
 	void DisplayGridWithPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path);
 
@@ -40,7 +49,7 @@ private:
 
 	Node* FindOpenNode(int x, int y) const;
 
-	bool IsInClosedListI(int x, int y) const;
+	bool IsInClosedList(int x, int y) const;
 
 	bool IsDestination(const Node* node) const;
 

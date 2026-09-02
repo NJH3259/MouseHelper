@@ -1,5 +1,6 @@
 #define NOMINMAX
 #include "AStar.h"
+#include <vector>
 
 AStar::AStar()
 {}
@@ -9,8 +10,130 @@ AStar::~AStar()
 	Clear();
 }
 
-std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos)
+std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, std::vector<std::vector<int>>& grid)
 {
+	// 초기화
+	Clear();
+
+	if (!IsValidGrid(grid))
+	{
+		return {};
+	}
+
+	if (!IsInRange(startPos.x, startPos.y, grid))
+	{
+		if (!IsInRange(destinationPos.x, destinationPos.y, grid))
+		{
+			return {};
+		}
+	}
+
+	if (grid[startPos.y][startPos.x] == (int)TileType::Wall || grid[destinationPos.y][destinationPos.x] == (int)TileType::Wall)
+	{
+		return {};
+	}
+
+	ClearVisualization(grid);
+
+	startNode = CreateNode(startPos);
+	targetNode = CreateNode(destinationPos);
+
+	startNode->gCost = 0.0f;
+	startNode->hCost = CalculateHeuristic(startPos, destinationPos);
+	startNode->fCost = startNode->gCost + startNode->hCost;
+
+	openList.emplace_back(startNode);
+
+	// 편의를 위해 사전 비용 설정
+	const float diagonalCost = 1.41421f;
+	const std::vector<Direction> directions =
+	{
+		{Vector2(0, -1), 1.0f}, {Vector2(0, 1), 1.0f},  // 상하
+		{Vector2(-1, 0), 1.0f}, {Vector2(1, 0), 1.0f},  // 좌우
+		{Vector2(-1, -1), diagonalCost},         // 좌상단
+		{Vector2(1, -1), diagonalCost},          // 우상단
+		{Vector2(-1, 1), diagonalCost},          // 좌하단
+		{Vector2(1, 1), diagonalCost}            // 우하단
+
+	};
+
+	while (!openList.empty())
+	{
+		Node* curNode = openList[0];
+		for (Node* node : openList)
+		{
+			// 탐색할 노드 선택
+			if (node->fCost < curNode->fCost || (node->fCost == curNode->fCost && node->hCost < curNode->hCost))
+			{
+				curNode = node;
+			}
+		}
+
+		// 목표 노드 확인
+		if (IsDestination(curNode))
+		{
+			return ConstructPath(curNode);
+		}
+
+		//현재 노드 처리
+		auto iterator = std::find(openList.begin(), openList.end(), curNode);
+
+		if (iterator != openList.end())
+		{
+			openList.erase(iterator);
+		}
+
+		closedList.emplace_back(curNode);
+
+		// 인접한 노드 탐색
+		for (const Direction& direction : directions)
+		{
+			Vector2 newPosition = curNode->position + direction.position;
+
+			// 인접 노드가 이동할 수 있는지 확인
+			if (!IsInRange(newPosition.x, newPosition.y, grid))
+			{
+				continue;
+			}
+
+			if (grid[newPosition.y][newPosition.x] == (int)TileType::Wall)
+			{
+				continue;
+			}
+
+			if (IsInClosedList(newPosition.x, newPosition.y))
+			{
+				continue;
+			}
+
+			// 새 이동 비용 계산
+			float newGCost = curNode->gCost + direction.cost;
+			
+			// 탐색한 이웃 노드가 이미 OpenNode에 있는 경우 cost적으로 더 효율적인지 판단
+			Node* openNode = FindOpenNode(newPosition.x, newPosition.y);
+			if (openNode)
+			{
+				if (newGCost < openNode->gCost)
+				{
+					openNode->gCost = newGCost;
+					openNode->fCost = openNode->gCost + openNode->hCost;
+					openNode->parentNode = curNode;
+				}
+
+				continue;
+			}
+
+			// OpenNode목록에 없는 새로 탐색된 노드인 경우
+			Node* neighborNode = CreateNode(newPosition, curNode);
+
+			neighborNode->gCost = newGCost;
+			neighborNode->hCost = CalculateHeuristic(neighborNode->position, targetNode->position);
+			neighborNode->fCost = neighborNode->gCost + neighborNode->hCost;
+
+			openList.emplace_back(neighborNode);
+		}
+	}
+
 	return std::vector<Vector2>();
 }
 
@@ -99,16 +222,40 @@ bool AStar::IsInRange(int x, int y, std::vector<std::vector<int>>& grid)
 
 bool AStar::IsDiagonalBlocked(const Vector2& current, const Direction& direction, const std::vector<std::vector<int>>& grid) const
 {
-	return false;
+	if (direction.position.x == 0 || direction.position.y == 0)
+	{
+		return false;
+	}
+
+	int sideX = current.x + direction.position.x;
+	int sideY = current.y + direction.position.y;
+
+	//대각선: 좌우 + 상하 (ex. 왼쪽 위 대각선: 왼쪽 + 위쪽 => 왼쪽이나 위쪽 중 하나라도 장애물이 있으면 대각선으로 이동할 수 없음 (돌아가야함))
+	return grid[current.y][sideX] == (int)TileType::Wall || grid[sideY][current.x] == (int)TileType::Wall;
 }
 
 Node* AStar::FindOpenNode(int x, int y) const
 {
+	for (Node* node : openList)
+	{
+		if (node->position == Vector2(x, y))
+		{
+			return node;
+		}
+	}
 	return nullptr;
 }
 
-bool AStar::IsInClosedListI(int x, int y) const
+bool AStar::IsInClosedList(int x, int y) const
 {
+	for (Node* node : closedList)
+	{
+		if (node->position == Vector2(x, y))
+		{
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -118,7 +265,25 @@ bool AStar::IsDestination(const Node* node) const
 }
 
 void AStar::ClearVisualization(std::vector<std::vector<int>>& grid)
-{}
+{
+	for (std::vector<int>& row : grid)
+	{
+		for (int& value : row) {
+			if (value == (int)TileType::Visited)
+			{
+				value = (int)TileType::Ground;
+			}
+		}
+	}
+}
 
 void AStar::DisplayGrid(std::vector<std::vector<int>>&grid) const
-{}
+{
+	for (int y = 0; y < (int)grid.size(); ++y)
+	{
+		for (int x = 0; (int)grid[y].size(); ++x)
+		{
+			// Renderer를 에 Submit을 통해 그리기
+		}
+	}
+}

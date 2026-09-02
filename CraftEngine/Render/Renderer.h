@@ -42,6 +42,9 @@ namespace Craft
 			//그리기 정렬순서 -> 언리얼에서는 zorder
 			//위치에 그림이 겹칠 경우 우선순위를 위함, 값이 크면 우선순위 높음
 			int sortingOrder = -1;
+
+			bool isTilemap = false;
+			const std::vector<std::vector<int>>* grid = nullptr;
 		};
 
 	public:
@@ -53,6 +56,9 @@ namespace Craft
 			const Vector2& position,
 			const Color& color = Color::White,
 			int sortingOrder = 0);
+
+		// 맵을 버퍼로 직접 전달하기 위한 함수
+		void SubmitTilemap(const std::vector<std::vector<int>>& mapGrid, const Vector2& position = { 0, 0 }, int sortingOrder = 0);
 
 		//Draw이벤트 함수 - 엔진에서 호출
 		void Draw();

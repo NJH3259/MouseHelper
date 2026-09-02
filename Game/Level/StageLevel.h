@@ -71,6 +71,11 @@ protected:
 		}
 	}
 
+	std::vector<std::vector<int>> MakeAStarGrid()
+	{
+
+	}
+
 private:
 	Timer startTimer;
 

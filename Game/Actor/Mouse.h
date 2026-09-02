@@ -24,5 +24,7 @@ private:
 
 private:
 	std::shared_ptr<Cheese> cheese = nullptr;
+
+	Craft::Vector2 pivot = (0, 0);
 };
 

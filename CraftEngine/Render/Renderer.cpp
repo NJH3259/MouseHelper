@@ -36,7 +36,7 @@ namespace Craft {
 				//빈문자 설정 - 기존 설정 값 지우기
 				info.Char.AsciiChar = ' ';
 				//색상 표기 안함
-				info.Attributes = static_cast<WORD>(Color::B_Green);
+				info.Attributes = 0;
 
 				//그리기 순서 배열 항목 초기화
 				sortingOrderArray[index] = -1;
@@ -94,6 +94,17 @@ namespace Craft {
 		//Render Queue에 명령 추가
 		renderQueue.emplace_back(command);
 	}
+
+	void Renderer::SubmitTilemap(const std::vector<std::vector<int>>& mapGrid, const Vector2& position, int sortingOrder)
+	{
+		RenderCommand command;
+		command.isTilemap = true;
+		command.grid = &mapGrid; // 맵 데이터의 주소만 전달 (복사 비용 0)
+		command.sortingOrder = sortingOrder;
+
+		renderQueue.emplace_back(command);
+	}
+
 	void Renderer::Draw()
 	{
 		//화면(이미지, 프레임) 지우기
@@ -124,6 +135,51 @@ namespace Craft {
 	void Renderer::DrawRenderQueue()
 	{
 		for (const RenderCommand& command : renderQueue) {
+
+			// 1. 타일맵 명령어인 경우
+			if (command.isTilemap && command.grid != nullptr)
+			{
+				const auto& grid = *command.grid;
+				int height = static_cast<int>(grid.size());
+				if (height == 0) continue;
+				//todo: 오류 해결
+				int width = static_cast<int>(grid[0].size());
+
+				int renderHeight = min(height, screenSize.y);
+				int renderWidth = min(width, screenSize.x);
+
+				for (int y = 0; y < renderHeight; ++y)
+				{
+					for (int x = 0; x < renderWidth; ++x)
+					{
+						int index = (y * screenSize.x) + x;
+
+						// Sorting Order 비교
+						if (frame->sortingOrderArray[index] > command.sortingOrder)
+							continue;
+
+						CHAR_INFO& info = frame->charInfoArray[index];
+						int tileType = grid[y][x];
+
+						if (tileType == 1) { // 벽
+							info.Char.AsciiChar = ' ';
+							info.Attributes = static_cast<WORD>(Color::B_Blue);
+						}
+						else if (tileType == 0) { // 바닥
+							info.Char.AsciiChar = ' ';
+							info.Attributes = static_cast<WORD>(Color::B_Green);
+						}
+						else if (tileType == 2) { // A* 경로
+							info.Char.AsciiChar = '.';
+							info.Attributes = static_cast<WORD>(Color::Red);
+						}
+
+						frame->sortingOrderArray[index] = command.sortingOrder;
+					}
+				}
+				continue; // 타일맵 처리 완료 후 다음 명령으로
+			}
+
 			//그릴 문자값이 없으면 건너뛰기
 			if (command.img.empty()) {
 				continue;

@@ -28,6 +28,8 @@ void Mouse::Tick(float deltaTime)
 	//게임 스테이지 패배 및 승리 시 Actor들 멈춤
 	IsActorStoped();
 
+	Vector2 pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
+
 	//매 프레임마다 최적 A* 경로를 탐색해서 목표를 향해 이동
 	MoveToCheese();
 }

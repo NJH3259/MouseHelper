@@ -39,5 +39,8 @@ private:
 	bool isSetOffset = false;
 
 	Craft::Vector2 curOffset = (0, 0);
+
+	//피봇: A*로 경로 탐색을 할 때 중심이 되는 시작 위치
+	Craft::Vector2 pivot = (0, 0);
 };
 

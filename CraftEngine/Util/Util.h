@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <string>
+#include <fstream>
 #include <random>
 #include <cassert>
 
@@ -68,13 +70,35 @@ namespace Util
 
 		assert(readSize > 0 && "No data in the file");
 
-		std::string actorImage(buffer, readSize);
+		std::string image(buffer, readSize);
 
 		delete[] buffer;
 		buffer = nullptr;
 
 		fclose(file);
 
-		return actorImage;
+		return image;
+	}
+
+	inline std::vector<std::vector<int>> LoadMapAsGrid(const std::string& filepath) {
+		std::ifstream file(filepath);
+		std::string line;
+		std::vector<std::vector<int>> grid;
+
+		while (std::getline(file, line)) { // 한 줄씩 string으로 읽음
+			std::vector<int> row;
+			for (char ch : line) {
+				if (ch == '1') {
+					row.push_back(1); // 벽 (이동 불가)
+				}
+				else if (ch == '0') {
+					row.push_back(0); // 길 (이동 가능)
+				}
+			}
+			if (!row.empty()) {
+				grid.push_back(row);
+			}
+		}
+		return grid;
 	}
 }

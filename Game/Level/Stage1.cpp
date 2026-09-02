@@ -2,10 +2,20 @@
 #include <Actor/Player.h>
 #include <Actor/Mouse.h>
 #include <Actor/Cat.h>
+#include <Util/Util.h>
+
+Stage1::Stage1()
+{
+	
+}
 
 void Stage1::OnInitialized()
 {
 	StageLevel::OnInitialized();
+
+	std::vector<std::vector<int>> grid = Util::LoadMapAsGrid("../Assets/Stage1.txt");
+
+	Renderer::GetRenderer().SubmitTilemap(grid);
 
 	SpawnActor<Player>();
 	SpawnActor<Mouse>(position, Craft::Color::White);

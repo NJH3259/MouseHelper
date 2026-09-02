@@ -30,6 +30,8 @@ void Cat::Tick(float deltaTime)
 		mouse = FindMouseInLevel();
 	}
 
+	Vector2 pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
+
 
 	if(!isHolded)
 	{
@@ -50,6 +52,8 @@ void Cat::Tick(float deltaTime)
 		{
 			std::string currentPos = "잡힌 고양이의 위치: (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")";
 			Renderer::GetRenderer().Submit(currentPos, Vector2(0, 0));
+			std::string pivotPos = "액터의 피봇 위치: (" + std::to_string(pivot.x) + ", " + std::to_string(pivot.y) + ")";
+			Renderer::GetRenderer().Submit(pivotPos, Vector2(0, 1));
 		}
 	}
 }

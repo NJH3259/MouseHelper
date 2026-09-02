@@ -5,6 +5,9 @@
 
 class Stage1 : public StageLevel
 {
+public:
+	Stage1();
+
 private:
 	virtual void OnInitialized() override;
 

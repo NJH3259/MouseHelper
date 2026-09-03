@@ -47,7 +47,6 @@ namespace Craft {
 		//결과 확인
 		assert(result == TRUE);
 
-		//todo:폰트 크기 조절
 		//직접 만든 콘솔의 커서 끄기
 		CONSOLE_CURSOR_INFO info;
 		GetConsoleCursorInfo(buffer, &info);

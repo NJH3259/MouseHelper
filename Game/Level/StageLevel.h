@@ -55,6 +55,15 @@ protected:
 			//todo: 디버그 모드 구현
 			isDebugMod = !isDebugMod;
 		}
+
+		if (!isDebugMod)
+		{
+			Renderer::GetRenderer().SubmitTilemap(grid);
+		}
+		else
+		{
+			Renderer::GetRenderer().SubmitTilemap(debugGrid, (0, 0), 4);
+		}
 	}
 
 	void WaitStartDelay(float deltaTime)
@@ -71,11 +80,6 @@ protected:
 		}
 	}
 
-	std::vector<std::vector<int>> MakeAStarGrid()
-	{
-
-	}
-
 protected:
 	Timer startTimer;
 
@@ -86,5 +90,5 @@ protected:
 	bool isDebugMod = false;
 
 	std::vector<std::vector<int>> grid;
-	std::vector<std::vector<int>> newGrid;
+	std::vector<std::vector<int>> debugGrid;
 };

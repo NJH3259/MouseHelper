@@ -57,7 +57,6 @@ void Cat::Tick(float deltaTime)
 	{
 		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Red, 5);
 
-
 		if (isHolded)
 		{
 			std::string currentPos = "잡힌 고양이의 위치: (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")";

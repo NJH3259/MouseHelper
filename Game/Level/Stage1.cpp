@@ -20,6 +20,7 @@ void Stage1::OnInitialized()
 	
 	debugGrid = GridExpander::MakeAStarGrid(grid, Vector2(11, 6));
 
+
 	SpawnActor<Player>();
 	SpawnActor<Cheese>(cheesePos, Craft::Color::Yellow);
 	SpawnActor<Mouse>(mousePos, Craft::Color::White);

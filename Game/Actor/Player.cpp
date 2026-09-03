@@ -43,9 +43,9 @@ void Player::Tick(float deltaTime)
 			int mouseX = Input::Get().GetMousePosition().x;
 			int mouseY = Input::Get().GetMousePosition().y;
 
-			std::string mousePosition = "(" + std::to_string(mouseX) + ", " + std::to_string(mouseY) + ")";
+			std::string mousePosition = "현재 마우스 위치: (" + std::to_string(mouseX) + ", " + std::to_string(mouseY) + ")";
 
-			Renderer::GetRenderer().Submit(mousePosition, Vector2(50, 20), Color::White, 5);
+			Renderer::GetRenderer().Submit(mousePosition, Vector2(2, 6), Color::White, 5);
 			//-------------------------------------------------------------------------------------------------//
 
 		}

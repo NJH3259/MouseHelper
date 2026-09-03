@@ -77,5 +77,8 @@
     <ClInclude Include="Algorithm\GridExpander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Algorithm\TileType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,6 +5,8 @@
 #include <Actor/Cat.h>
 #include <Util/Util.h>
 
+#include <Algorithm/GridExpander.h>
+
 Stage1::Stage1()
 {
 	
@@ -15,6 +17,8 @@ void Stage1::OnInitialized()
 	StageLevel::OnInitialized();
 
 	grid = Util::LoadMapAsGrid("../Assets/Stage1.txt");
+	
+	newGrid = GridExpander::MakeAStarGrid(grid, Vector2(11, 6));
 
 	SpawnActor<Player>();
 	SpawnActor<Cheese>(cheesePos, Craft::Color::Yellow);
@@ -38,5 +42,12 @@ void Stage1::Tick(float deltaTime)
 {
 	StageLevel::Tick(deltaTime);
 
-	Renderer::GetRenderer().SubmitTilemap(grid);
+	if (!isDebugMod)
+	{
+		Renderer::GetRenderer().SubmitTilemap(grid);
+	}
+	else
+	{
+		Renderer::GetRenderer().SubmitTilemap(newGrid);
+	}
 }

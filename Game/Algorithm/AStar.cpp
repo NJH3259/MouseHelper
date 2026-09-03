@@ -1,5 +1,6 @@
 #define NOMINMAX
 #include "AStar.h"
+#include "TileType.h"
 #include <vector>
 
 AStar::AStar()

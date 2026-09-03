@@ -50,8 +50,14 @@ void Cat::Tick(float deltaTime)
 		}
 
 		position = GetMousePosition() - curOffset;
+	}
 
-		if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+	{
+		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Red, 2);
+
+		if (isHolded)
 		{
 			std::string currentPos = "잡힌 고양이의 위치: (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")";
 			Renderer::GetRenderer().Submit(currentPos, Vector2(2, 4), Color::White, 5);
@@ -59,6 +65,7 @@ void Cat::Tick(float deltaTime)
 			Renderer::GetRenderer().Submit(pivotPos, Vector2(2, 5), Color::White, 5);
 		}
 	}
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 }
 
 void Cat::OnCollision(const std::shared_ptr<Actor>&other)

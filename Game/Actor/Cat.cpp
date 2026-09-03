@@ -55,7 +55,8 @@ void Cat::Tick(float deltaTime)
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
 	{
-		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Red, 2);
+		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Red, 5);
+
 
 		if (isHolded)
 		{

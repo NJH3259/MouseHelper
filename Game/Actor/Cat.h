@@ -17,6 +17,8 @@ public:
 	inline void ReleaseIsHoldedState() { isHolded = false; }
 
 private:
+	virtual void BeginPlay() override;
+
 	virtual void Tick(float deltaTime) override;
 
 	virtual void OnCollision(const std::shared_ptr<Actor>& other) override;

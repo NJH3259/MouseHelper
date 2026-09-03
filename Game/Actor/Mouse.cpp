@@ -4,6 +4,7 @@
 #include <Level/Level.h>
 #include <Util/Util.h>
 
+#include <memory>
 #include <cassert>
 
 using namespace Craft;
@@ -15,10 +16,18 @@ Mouse::Mouse(const Vector2 position, Color color)
 
 	sortingOrder = 1;
 
-	//현재 레벨 객체의 FindActorInLevelWithType함수 사용
-	//cheese = FindCheeseInLevel();
-
 	isActorStoped = false;
+}
+
+void Mouse::BeginPlay()
+{
+	Actor::BeginPlay();
+
+	if(!cheese)
+	{
+		//현재 레벨 객체의 FindActorInLevelWithType함수 사용
+		cheese = FindCheeseInLevel();
+	}
 }
 
 void Mouse::Tick(float deltaTime)
@@ -54,7 +63,7 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 //목표를 향해 A*알고리즘으로 길을 찾아가는 함수
 void Mouse::MoveToCheese()
 {
-	//assert(cheese && "cheese should not be null");
+	assert(cheese && "cheese should not be null");
 
 	//치즈를 향해 A* 알고리즘으로 최적 경로를 탐색한다.
 

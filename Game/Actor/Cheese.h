@@ -3,7 +3,7 @@
 #include <Actor/Actor.h>
 
 using namespace Craft;
-class Cheese : public Actor
+class Cheese : public Craft::Actor
 {
 	TYPE_DECLARATIONS(Cheese, Actor)
 

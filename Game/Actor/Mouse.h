@@ -14,6 +14,8 @@ public:
 	Mouse(const Craft::Vector2 position, Craft::Color color);
 	
 private:
+	virtual void BeginPlay() override;
+	
 	virtual void Tick(float deltaTime) override;
 
 	virtual void OnCollision(const std::shared_ptr<Actor>& other) override;

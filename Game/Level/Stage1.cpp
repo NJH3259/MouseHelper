@@ -1,4 +1,5 @@
 #include "Stage1.h"
+#include <Actor/Cheese.h>
 #include <Actor/Player.h>
 #include <Actor/Mouse.h>
 #include <Actor/Cat.h>
@@ -16,7 +17,8 @@ void Stage1::OnInitialized()
 	grid = Util::LoadMapAsGrid("../Assets/Stage1.txt");
 
 	SpawnActor<Player>();
-	SpawnActor<Mouse>(position, Craft::Color::White);
+	SpawnActor<Cheese>(cheesePos, Craft::Color::Yellow);
+	SpawnActor<Mouse>(mousePos, Craft::Color::White);
 	SpawnActor<Cat>(catPos1, Craft::Color::White);
 	SpawnActor<Cat>(catPos2, Craft::Color::White);
 }

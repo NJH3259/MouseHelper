@@ -67,7 +67,7 @@ protected:
 				isLevelStarted = true;
 			}
 			std::string leftTimeString = "Until Start: " + std::to_string(static_cast<int>(startDelay - startTimer.GetElapsedTime()) + 1);
-			Renderer::GetRenderer().Submit(leftTimeString, Vector2(0, 2));
+			Renderer::GetRenderer().Submit(leftTimeString, Vector2(3, 4), Color::White, 5);
 		}
 	}
 

@@ -20,15 +20,18 @@ Cat::Cat(const Vector2 position, Color color)
 	isActorStoped = false;
 }
 
+void Cat::BeginPlay()
+{
+	if (!mouse) {
+		mouse = FindMouseInLevel();
+	}
+}
+
 void Cat::Tick(float deltaTime)
 {
 	Actor::Tick(deltaTime);
 
 	IsActorStoped();
-
-	if (!mouse) {
-		mouse = FindMouseInLevel();
-	}
 
 	Vector2 pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 

@@ -13,14 +13,10 @@ private:
 
 	virtual void ResetLevel() override;
 
-	virtual void Tick(float deltaTime) override;
-
 private:
 	Craft::Vector2 cheesePos = Craft::Vector2(200, 40);
 	Craft::Vector2 mousePos = Craft::Vector2(20, 20);
 	Craft::Vector2 catPos1 = Craft::Vector2(150, 10);
 	Craft::Vector2 catPos2 = Craft::Vector2(60, 40);
-
-	std::vector<std::vector<int>> grid;
 };
 

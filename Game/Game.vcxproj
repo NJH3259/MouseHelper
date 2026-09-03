@@ -116,6 +116,7 @@
     <ClInclude Include="Algorithm\AStar.h" />
     <ClInclude Include="Algorithm\GridExpander.h" />
     <ClInclude Include="Algorithm\Node.h" />
+    <ClInclude Include="Algorithm\TileType.h" />
     <ClInclude Include="GameManager\Game.h" />
     <ClInclude Include="Level\StageLevel.h" />
     <ClInclude Include="Level\Stage1.h" />

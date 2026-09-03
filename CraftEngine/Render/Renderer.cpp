@@ -142,7 +142,7 @@ namespace Craft {
 				const auto& grid = *command.grid;
 				int height = static_cast<int>(grid.size());
 				if (height == 0) continue;
-				//todo: 오류 해결
+
 				int width = static_cast<int>(grid[0].size());
 
 				int renderHeight = min(height, screenSize.y);

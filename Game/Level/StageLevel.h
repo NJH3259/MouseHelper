@@ -76,7 +76,7 @@ protected:
 
 	}
 
-private:
+protected:
 	Timer startTimer;
 
 	float startDelay = 3.0f;
@@ -84,4 +84,7 @@ private:
 	bool isLevelStarted = false;
 
 	bool isDebugMod = false;
+
+	std::vector<std::vector<int>> grid;
+	std::vector<std::vector<int>> newGrid;
 };

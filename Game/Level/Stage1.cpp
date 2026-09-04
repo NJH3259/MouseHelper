@@ -18,12 +18,12 @@ void Stage1::OnInitialized()
 
 	grid = Util::LoadMapAsGrid("../Assets/Stage1.txt");
 	
-	debugGrid = GridExpander::MakeAStarGrid(grid, Vector2(11, 6));
+	collisionGrid = GridExpander::MakeAStarGrid(grid, Vector2(11, 6));
 
 	SpawnActor<Player>();
 	SpawnActor<Cheese>(cheesePos, Craft::Color::Yellow);
 	SpawnActor<Mouse>(mousePos, Craft::Color::White);
-	SpawnActor<Cat>(catPos1, Craft::Color::White);
+	//SpawnActor<Cat>(catPos1, Craft::Color::White);
 	SpawnActor<Cat>(catPos2, Craft::Color::White);
 }
 

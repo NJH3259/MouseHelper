@@ -15,9 +15,13 @@ Cat::Cat(const Vector2 position, Color color)
 {
 	ChangeImage(Util::LoadImageFromFile("Cat.txt", "../Assets/"));
 
+	moveTimer.SetTargetTime(0.3f);
+
 	sortingOrder = 1;
 
 	isActorStoped = false;
+
+	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 }
 
 void Cat::BeginPlay()
@@ -33,7 +37,9 @@ void Cat::Tick(float deltaTime)
 
 	IsActorStoped();
 
-	Vector2 pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
+	moveTimer.Tick(deltaTime);
+
+	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 
 
 	if(!isHolded)
@@ -52,7 +58,11 @@ void Cat::Tick(float deltaTime)
 
 		//이 연산을 Tick에서 매번 수행하면 혹시나 벽과 겹치는 상황을 없앨 수 있지만, 매 Tick마다 연산을 진행하여 성능이 떨어질 수 있음 -> 고민해볼 문제
 
-		MoveToMouse();
+		if(moveTimer.IsTimeOut())
+		{
+			MoveToMouse();
+			moveTimer.Reset();
+		}
 	}
 	else
 	{
@@ -96,6 +106,25 @@ void Cat::MoveToMouse()
 	//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
 
 	//mouse를 향해 최적 경로로 한칸 이동
+
+	if (!isHolded)
+	{
+		path.clear();
+		std::vector<std::vector<int>> grid = std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetGridForPath();
+		path = catPathFinder.FindPath(pivot, mouse->GetPivot(), grid);
+
+		//디버그 모드인 경우 경로 그리기
+		if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+		{
+			catPathFinder.DisplayPath(grid, path);
+		}
+
+		//위치를 찾은 경로의 다음 픽셀로 변경
+		if (path[0] != mouse->GetPivot());
+		{
+			position = path[1] - Vector2((int)(GetWidth() / 2), (int)(GetHeight() / 2));
+		}
+	}
 }
 
 //마우스 커서 위치를 받아서 고양이 위치를 이동시킬 함수

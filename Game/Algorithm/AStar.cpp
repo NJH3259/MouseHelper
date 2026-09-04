@@ -1,6 +1,8 @@
 #define NOMINMAX
 #include "AStar.h"
 #include "TileType.h"
+#include <Render/Renderer.h>
+
 #include <vector>
 
 /*	고려해야할 문제
@@ -79,7 +81,7 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 			}
 		}
 
-		// 목표 노드 확인
+		// 목표 노드인지 확인
 		if (IsDestination(curNode))
 		{
 			return ConstructPath(curNode);
@@ -147,8 +149,24 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 	return std::vector<Vector2>();
 }
 
-void AStar::DisplayGridWithPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path)
-{}
+void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path)
+{
+	// 경로 표시를 위해 visited를 ground로 초기화
+	ClearVisualization(grid);
+
+	for (const Vector2 position : path)
+	{
+		int value = grid[position.y][position.x];
+
+		if (value == (int)TileType::Start || value == (int)TileType::Goal)
+		{
+			continue;
+		}
+
+		// 시작점이나 도착점이 아닌 경우 Renderer에 path를 그리도록 전달
+		Renderer::GetRenderer().Submit(" ", position, Color::B_Red, 5);
+	}
+}
 
 void AStar::Clear()
 {
@@ -283,17 +301,6 @@ void AStar::ClearVisualization(std::vector<std::vector<int>>& grid)
 			{
 				value = (int)TileType::Ground;
 			}
-		}
-	}
-}
-
-void AStar::DisplayGrid(std::vector<std::vector<int>>&grid) const
-{
-	for (int y = 0; y < (int)grid.size(); ++y)
-	{
-		for (int x = 0; (int)grid[y].size(); ++x)
-		{
-			// Renderer를 에 Submit을 통해 그리기
 		}
 	}
 }

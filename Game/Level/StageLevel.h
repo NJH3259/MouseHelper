@@ -14,6 +14,8 @@ public:
 	virtual void ResetLevel()
 	{}
 
+	std::vector<std::vector<int>> GetGridForPath() { return collisionGrid; }
+
 protected:
 	virtual void OnInitialized() override
 	{
@@ -62,7 +64,7 @@ protected:
 		}
 		else
 		{
-			Renderer::GetRenderer().SubmitTilemap(debugGrid, (0, 0), 4);
+			Renderer::GetRenderer().SubmitTilemap(collisionGrid, (0, 0), 4);
 		}
 	}
 
@@ -90,5 +92,5 @@ protected:
 	bool isDebugMod = false;
 
 	std::vector<std::vector<int>> grid;
-	std::vector<std::vector<int>> debugGrid;
+	std::vector<std::vector<int>> collisionGrid;
 };

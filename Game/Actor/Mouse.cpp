@@ -51,6 +51,13 @@ void Mouse::Tick(float deltaTime)
 
 	//매 프레임마다 최적 A* 경로를 탐색해서 목표를 향해 이동
 	MoveToCheese();
+
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+	{
+		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Green, 5);
+	}
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 }
 
 void Mouse::OnCollision(const std::shared_ptr<Actor>&other)

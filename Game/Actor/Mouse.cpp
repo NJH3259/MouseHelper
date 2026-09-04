@@ -20,6 +20,8 @@ Mouse::Mouse(const Vector2 position, Color color)
 	isActorStoped = false;
 
 	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
+
+	moveTimer.SetTargetTime(0.3f);
 }
 
 void Mouse::BeginPlay()
@@ -31,11 +33,18 @@ void Mouse::BeginPlay()
 		//현재 레벨 객체의 FindActorInLevelWithType함수 사용
 		cheese = FindCheeseInLevel();
 	}
+
+	if (gridForPath.empty())
+	{
+		gridForPath = std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetGridForPath();
+	}
 }
 
 void Mouse::Tick(float deltaTime)
 {
 	Actor::Tick(deltaTime);
+
+	moveTimer.Tick(deltaTime);
 
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
@@ -62,14 +71,8 @@ void Mouse::Tick(float deltaTime)
 
 void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 {
-	//충돌한 액터 타입이 Cat인 경우
-	if (Cast<Cat>(other))
-	{
-		GetOwner()->SetIsLevelStoped(true);
-		//todo: 레벨 실패 처리
-	}
 	//충돌한 액터 타입이 Cheese인 경우
-	else if (Cast<Cheese>(other))
+	if (Cast<Cheese>(other))
 	{
 		GetOwner()->SetIsLevelStoped(true);
 		//todo: 레벨 클리어 처리
@@ -81,9 +84,29 @@ void Mouse::MoveToCheese()
 {
 	assert(cheese && "cheese should not be null");
 
-	//치즈를 향해 A* 알고리즘으로 최적 경로를 탐색한다.
+	//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
+	path.clear();
+	path = mousePathFinder.FindPath(pivot, cheese->GetPivot(), gridForPath);
 
-	//최적 경로를 따라 이동한다.
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+	if (ISDEBUGMOD)
+	{
+		//디버그 모드인 경우 경로 그리기
+		mousePathFinder.DisplayPath(gridForPath, path, Color::B_Blue);
+	}
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+
+	// 매 프레임마다 이동은 지나치게 빠르므로 이동은 제한 시간을 두고 이동한다.
+	if (moveTimer.IsTimeOut())
+	{
+		// 피봇이 mouse의 피봇과 완전히 겹치는 경우 path의 size는 1이다(자기 자신의 위치만 들어있음)
+		if (path.size() > 1)
+		{
+			// mouse를 향해 최적 경로로 한칸 이동
+			position = path[1] - Vector2((int)(GetWidth() / 2), (int)(GetHeight() / 2));
+		}
+		moveTimer.Reset();
+	}
 }
 
 std::shared_ptr<Cheese> Mouse::FindCheeseInLevel()

@@ -23,7 +23,7 @@ void Stage1::OnInitialized()
 	SpawnActor<Player>();
 	SpawnActor<Cheese>(cheesePos, Craft::Color::Yellow);
 	SpawnActor<Mouse>(mousePos, Craft::Color::White);
-	//SpawnActor<Cat>(catPos1, Craft::Color::White);
+	SpawnActor<Cat>(catPos1, Craft::Color::White);
 	SpawnActor<Cat>(catPos2, Craft::Color::White);
 }
 

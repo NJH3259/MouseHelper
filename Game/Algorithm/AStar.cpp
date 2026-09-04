@@ -157,17 +157,19 @@ void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<V
 	// 경로 표시를 위해 visited를 ground로 초기화
 	ClearVisualization(grid);
 
+	int iterator = 0;
 	for (const Vector2 position : path)
 	{
-		int value = grid[position.y][position.x];
-
-		if (value == (int)TileType::Start || value == (int)TileType::Goal)
+		if (iterator == 0 || iterator == path.size())
 		{
+			++iterator;
 			continue;
 		}
 
 		// 시작점이나 도착점이 아닌 경우 Renderer에 path를 그리도록 전달
 		Renderer::GetRenderer().Submit(" ", position, color, 5);
+
+		++iterator;
 	}
 }
 

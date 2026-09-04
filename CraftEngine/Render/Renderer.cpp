@@ -226,48 +226,17 @@ namespace Craft {
 					continue;
 				}
 
-				if (command.img[sourceIndex] == '@')
-				{
-					//2차원 배열에 글자, 속성 설정
-					frame->charInfoArray[index].Char.AsciiChar = ' ';
-
-					frame->charInfoArray[index].Attributes = static_cast<WORD>(Color::B_Blue);
-
-					//그리기 우선순위 값 설정
-					frame->sortingOrderArray[index] = command.sortingOrder;
-				}
 				
-				else if (command.img[sourceIndex] == '.')
-				{
-					frame->charInfoArray[index].Char.AsciiChar = ' ';
-
-					frame->charInfoArray[index].Attributes = static_cast<WORD>(Color::B_Green);
-
-					//그리기 우선순위 값 설정
-					frame->sortingOrderArray[index] = command.sortingOrder;
-				}
-
-				else if (command.img[sourceIndex] == '&')
-				{
-					frame->charInfoArray[index].Char.AsciiChar = ' ';
-
-					frame->charInfoArray[index].Attributes = static_cast<WORD>(Color::B_Red);
-
-					//그리기 우선순위 값 설정
-					frame->sortingOrderArray[index] = command.sortingOrder;
-				}
-
-				else
-				{
-					//2차원 배열에 글자, 속성 설정
-					frame->charInfoArray[index].Char.AsciiChar = command.img[sourceIndex];
-				
-					//글자 색상 설정
-					frame->charInfoArray[index].Attributes = static_cast<DWORD>(command.color);
-				
-					//그리기 우선순위 값 설정
-					frame->sortingOrderArray[index] = command.sortingOrder;
-				}
+			
+				//2차원 배열에 글자, 속성 설정
+				frame->charInfoArray[index].Char.AsciiChar = command.img[sourceIndex];
+			
+				//글자 색상 설정
+				frame->charInfoArray[index].Attributes = static_cast<DWORD>(command.color);
+			
+				//그리기 우선순위 값 설정
+				frame->sortingOrderArray[index] = command.sortingOrder;
+			
 			}
 
 		}

@@ -38,6 +38,9 @@ void Mouse::BeginPlay()
 	{
 		gridForPath = std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetGridForPath();
 	}
+
+	path.clear();
+	path = mousePathFinder.FindPath(pivot, cheese->GetPivot(), gridForPath);
 }
 
 void Mouse::Tick(float deltaTime)
@@ -79,14 +82,10 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 	}
 }
 
-//todo: 구현 필요
+// 치즈를 향해 경로를 탐색하고 1픽셀 단위로 이동함. 이동 후 다시 경로 탐색
 void Mouse::MoveToCheese()
 {
 	assert(cheese && "cheese should not be null");
-
-	//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
-	path.clear();
-	path = mousePathFinder.FindPath(pivot, cheese->GetPivot(), gridForPath);
 
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 	if (ISDEBUGMOD)
@@ -99,6 +98,10 @@ void Mouse::MoveToCheese()
 	// 매 프레임마다 이동은 지나치게 빠르므로 이동은 제한 시간을 두고 이동한다.
 	if (moveTimer.IsTimeOut())
 	{
+		//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
+		path.clear();
+		path = mousePathFinder.FindPath(pivot, cheese->GetPivot(), gridForPath);
+
 		// 피봇이 mouse의 피봇과 완전히 겹치는 경우 path의 size는 1이다(자기 자신의 위치만 들어있음)
 		if (path.size() > 1)
 		{

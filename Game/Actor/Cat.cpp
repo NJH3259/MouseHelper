@@ -15,7 +15,7 @@ Cat::Cat(const Vector2 position, Color color)
 {
 	ChangeImage(Util::LoadImageFromFile("Cat.txt", "../Assets/"));
 
-	moveTimer.SetTargetTime(0.3f);
+	moveTimer.SetTargetTime(0.18f);
 
 	sortingOrder = 1;
 
@@ -120,7 +120,7 @@ void Cat::MoveToMouse()
 		}
 
 		//위치를 찾은 경로의 다음 픽셀로 변경
-		if (path[0] != mouse->GetPivot());
+		if (path.size() > 1)
 		{
 			position = path[1] - Vector2((int)(GetWidth() / 2), (int)(GetHeight() / 2));
 		}

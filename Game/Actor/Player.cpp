@@ -13,6 +13,12 @@ void Player::Tick(float deltaTime)
 {
 	Actor::Tick(deltaTime);
 
+	//if (ISDEBUGMOD)
+	{
+		std::string fpsString = "fps: " + std::to_string((1.0f / deltaTime));
+		Renderer::GetRenderer().Submit(fpsString, Vector2(3, 8), Color::White, 8);
+	}
+
 	//플레이어 액터는 보이지 않지만 위치는 마우스 위치임
 	position = Input::Get().GetMousePosition();
 
@@ -37,7 +43,7 @@ void Player::Tick(float deltaTime)
 		if(ISDEBUGMOD)
 		{
 
-			//-----------------------------------------------------testcode------------------------------------//
+			//-----------------------------------------------------Debug Mod------------------------------------//
 			int mouseX = Input::Get().GetMousePosition().x;
 			int mouseY = Input::Get().GetMousePosition().y;
 

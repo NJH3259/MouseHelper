@@ -10,6 +10,10 @@ class Cheese : public Craft::Actor
 public:
 	Cheese(const Vector2 position, Color color);
 
+	inline Vector2 GetPivot() { return pivot; }
+
 private:
 	virtual void OnCollision(const std::shared_ptr<Actor>& other) override;
+
+	Vector2 pivot = (0, 0);
 };

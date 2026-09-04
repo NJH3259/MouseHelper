@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Actor/Actor.h>
+#include <Algorithm/AStar.h>
+#include <Util/Timer.h>
 
 #include <memory>
 
@@ -32,5 +34,12 @@ private:
 	std::shared_ptr<Cheese> cheese = nullptr;
 
 	Craft::Vector2 pivot = (0, 0);
+
+	std::vector<std::vector<int>> gridForPath = {};
+
+	AStar mousePathFinder;
+	std::vector<Vector2> path;
+
+	Timer moveTimer;
 };
 

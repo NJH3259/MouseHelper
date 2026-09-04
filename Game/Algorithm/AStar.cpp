@@ -48,7 +48,9 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 	ClearVisualization(grid);
 
 	startNode = CreateNode(startPos);
+	grid[startPos.y][startPos.x] = (int)TileType::Start;
 	targetNode = CreateNode(destinationPos);
+	grid[destinationPos.y][destinationPos.x] = (int)TileType::Goal;
 
 	startNode->gCost = 0.0f;
 	startNode->hCost = CalculateHeuristic(startPos, destinationPos);
@@ -146,7 +148,8 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 		}
 	}
 
-	return std::vector<Vector2>();
+	//실패 시 빈 경로 반환
+	return {};
 }
 
 void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path, Color color)

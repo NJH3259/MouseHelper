@@ -15,7 +15,7 @@ Cat::Cat(const Vector2 position, Color color)
 {
 	ChangeImage(Util::LoadImageFromFile("Cat.txt", "../Assets/"));
 
-	moveTimer.SetTargetTime(0.12f);
+	moveTimer.SetTargetTime(0.18f);
 
 	sortingOrder = 1;
 
@@ -96,7 +96,16 @@ void Cat::Tick(float deltaTime)
 
 void Cat::OnCollision(const std::shared_ptr<Actor>&other)
 {
-
+	
+	if(!isHolded)
+	{
+		// 쥐와 충돌한 경우
+		if (Cast<Mouse>(other))
+		{
+			GetOwner()->SetIsLevelStoped(true);
+			//todo: 레벨 실패 처리
+		}
+	}
 }
 
 void Cat::MoveToMouse()
@@ -106,21 +115,13 @@ void Cat::MoveToMouse()
 	//플레이어에게 붙잡힌 상태가 아니라면
 	if (!isHolded)
 	{
-		//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
-		path.clear();
-		path = catPathFinder.FindPath(pivot, mouse->GetPivot(), gridForPath);
-
-		//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
-		if (ISDEBUGMOD)
-		{
-			//디버그 모드인 경우 경로 그리기
-			catPathFinder.DisplayPath(gridForPath, path);
-		}
-		//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
-
 		// 매 프레임마다 이동은 지나치게 빠르므로 이동은 제한 시간을 두고 이동한다.
 		if(moveTimer.IsTimeOut())
 		{
+			//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
+			path.clear();
+			path = catPathFinder.FindPath(pivot, mouse->GetPivot(), gridForPath);
+
 			// 피봇이 mouse의 피봇과 완전히 겹치는 경우 path의 size는 1이다(자기 자신의 위치만 들어있음)
 			if (path.size() > 1)
 			{
@@ -130,6 +131,14 @@ void Cat::MoveToMouse()
 			moveTimer.Reset();
 		}
 	}
+
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+	if (ISDEBUGMOD)
+	{
+		//디버그 모드인 경우 경로 그리기
+		catPathFinder.DisplayPath(gridForPath, path);
+	}
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 }
 
 Craft::Vector2 Cat::GetMousePosition()

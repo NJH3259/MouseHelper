@@ -12,6 +12,8 @@ class Mouse : public Craft::Actor
 
 public:
 	Mouse(const Craft::Vector2 position, Craft::Color color);
+
+	Craft::Vector2 GetPivot() { return pivot; }
 	
 private:
 	virtual void BeginPlay() override;

@@ -21,7 +21,7 @@ public:
 
 	std::vector<Vector2> FindPath(const Vector2 startPos, const Vector2 destinationPos, std::vector<std::vector<int>>& grid);
 
-	void DisplayGridWithPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path);
+	void DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path);
 
 private:
 	void Clear();

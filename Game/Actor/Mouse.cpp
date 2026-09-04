@@ -1,8 +1,9 @@
 #include "Mouse.h"
 #include <Actor/Cheese.h>
 #include <Actor/Cat.h>
-#include <Level/Level.h>
+#include <Level/StageLevel.h>
 #include <Util/Util.h>
+#include <Render/Renderer.h>
 
 #include <memory>
 #include <cassert>
@@ -17,6 +18,8 @@ Mouse::Mouse(const Vector2 position, Color color)
 	sortingOrder = 1;
 
 	isActorStoped = false;
+
+	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 }
 
 void Mouse::BeginPlay()
@@ -37,10 +40,17 @@ void Mouse::Tick(float deltaTime)
 	//게임 스테이지 패배 및 승리 시 Actor들 멈춤
 	IsActorStoped();
 
-	Vector2 pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
+	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 
 	//매 프레임마다 최적 A* 경로를 탐색해서 목표를 향해 이동
 	MoveToCheese();
+
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+	{
+		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Green, 5);
+	}
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 }
 
 void Mouse::OnCollision(const std::shared_ptr<Actor>&other)

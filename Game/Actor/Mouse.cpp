@@ -49,13 +49,6 @@ void Mouse::Tick(float deltaTime)
 
 	moveTimer.Tick(deltaTime);
 
-	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
-	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
-	{
-		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Green, 7);
-	}
-	//-----------------------------------------------------------Debug Mod--------------------------------------------------------/
-
 	//게임 스테이지 패배 및 승리 시 Actor들 멈춤
 	IsActorStoped();
 
@@ -67,7 +60,7 @@ void Mouse::Tick(float deltaTime)
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
 	{
-		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Green, 5);
+		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Green, 7);
 	}
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 }
@@ -87,14 +80,6 @@ void Mouse::MoveToCheese()
 {
 	assert(cheese && "cheese should not be null");
 
-	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
-	if (ISDEBUGMOD)
-	{
-		//디버그 모드인 경우 경로 그리기
-		mousePathFinder.DisplayPath(gridForPath, path, Color::B_Blue);
-	}
-	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
-
 	// 매 프레임마다 이동은 지나치게 빠르므로 이동은 제한 시간을 두고 이동한다.
 	if (moveTimer.IsTimeOut())
 	{
@@ -110,6 +95,14 @@ void Mouse::MoveToCheese()
 		}
 		moveTimer.Reset();
 	}
+
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+	if (ISDEBUGMOD)
+	{
+		//디버그 모드인 경우 경로 그리기
+		mousePathFinder.DisplayPath(gridForPath, path, Color::B_Blue);
+	}
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 }
 
 std::shared_ptr<Cheese> Mouse::FindCheeseInLevel()

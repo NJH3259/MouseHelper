@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Node.h"
+#include <Math/Color.h>
 #include <vector>
 #include <memory>
 
@@ -21,7 +22,7 @@ public:
 
 	std::vector<Vector2> FindPath(const Vector2 startPos, const Vector2 destinationPos, std::vector<std::vector<int>>& grid);
 
-	void DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path);
+	void DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path, Color color = Color::B_Red);
 
 private:
 	void Clear();
@@ -45,8 +46,6 @@ private:
 	bool IsDestination(const Node* node) const;
 
 	void ClearVisualization(std::vector<std::vector<int>>& grid);
-
-	void DisplayGrid(std::vector<std::vector<int>>& grid) const;
 
 private:
 	std::vector<Node*> allocatedNodes;

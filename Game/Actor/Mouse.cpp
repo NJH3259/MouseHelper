@@ -37,6 +37,13 @@ void Mouse::Tick(float deltaTime)
 {
 	Actor::Tick(deltaTime);
 
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+	{
+		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Green, 7);
+	}
+	//-----------------------------------------------------------Debug Mod--------------------------------------------------------/
+
 	//게임 스테이지 패배 및 승리 시 Actor들 멈춤
 	IsActorStoped();
 
@@ -70,7 +77,6 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 }
 
 //todo: 구현 필요
-//목표를 향해 A*알고리즘으로 길을 찾아가는 함수
 void Mouse::MoveToCheese()
 {
 	assert(cheese && "cheese should not be null");
@@ -80,7 +86,6 @@ void Mouse::MoveToCheese()
 	//최적 경로를 따라 이동한다.
 }
 
-//Actor를 소유한 레벨의 액터 목록에서 특정 타입의 액터를 가져와 반환
 std::shared_ptr<Cheese> Mouse::FindCheeseInLevel()
 {
 	std::shared_ptr<Cheese> cheese = nullptr;

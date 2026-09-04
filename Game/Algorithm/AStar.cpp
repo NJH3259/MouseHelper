@@ -149,7 +149,7 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 	return std::vector<Vector2>();
 }
 
-void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path)
+void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path, Color color)
 {
 	// 경로 표시를 위해 visited를 ground로 초기화
 	ClearVisualization(grid);
@@ -164,7 +164,7 @@ void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<V
 		}
 
 		// 시작점이나 도착점이 아닌 경우 Renderer에 path를 그리도록 전달
-		Renderer::GetRenderer().Submit(" ", position, Color::B_Red, 5);
+		Renderer::GetRenderer().Submit(" ", position, color, 5);
 	}
 }
 

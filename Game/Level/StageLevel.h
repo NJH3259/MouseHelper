@@ -39,25 +39,26 @@ protected:
 
 		Level::Tick(deltaTime);
 
-		//일시 정지 단축키 todo: 메뉴 화면 생성 및 메뉴로 이동
+		// todo: 메뉴 화면 생성 및 메뉴로 이동
 		if (Input::Get().GetKeyDown(VK_ESCAPE))
 		{
 			isLevelStoped = !isLevelStoped;
 		}
 
-		//레벨 리셋 단축키
+		// 레벨 리셋 단축키
 		if (Input::Get().GetKeyDown('R'))
 		{
 			ResetLevel();
 			
 		}
 
+		// 디버그 모드 토글 단축키
 		if (Input::Get().GetKeyDown('D'))
 		{
-			//todo: 디버그 모드 구현
 			isDebugMod = !isDebugMod;
 		}
 
+		// 디버그 모드 시 A* 판정용 그리드 표시
 		if (!isDebugMod)
 		{
 			Renderer::GetRenderer().SubmitTilemap(grid);
@@ -68,6 +69,7 @@ protected:
 		}
 	}
 
+	// 게임 레벨 시작 시 약간 딜레이를 주어 플레이어가 상황을 볼 수 있도록 하기 위한 함수
 	void WaitStartDelay(float deltaTime)
 	{
 		if (!isLevelStarted)

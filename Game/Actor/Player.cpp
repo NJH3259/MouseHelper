@@ -14,8 +14,6 @@ void Player::Tick(float deltaTime)
 	Actor::Tick(deltaTime);
 
 	//플레이어 액터는 보이지 않지만 위치는 마우스 위치임
-	//position.x = Input::Get().GetMousePosition().x;
-	//position.y = Input::Get().GetMousePosition().y;
 	position = Input::Get().GetMousePosition();
 
 	if (Input::Get().GetKeyDown(VK_LBUTTON))
@@ -36,7 +34,7 @@ void Player::Tick(float deltaTime)
 
 	if (Input::Get().GetKey(VK_LBUTTON))
 	{
-		if(std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+		if(ISDEBUGMOD)
 		{
 
 			//-----------------------------------------------------testcode------------------------------------//
@@ -49,7 +47,6 @@ void Player::Tick(float deltaTime)
 			//-------------------------------------------------------------------------------------------------//
 
 		}
-		// 
 		//고양이 액터를 집은 상태라면 고양이 액터 위치를 마우스 커서 위치로 지정 -> Cat의 Tick에서 플래그에 따라 따라가도록 하고 있음
 	}
 
@@ -75,18 +72,8 @@ void Player::Tick(float deltaTime)
 		//플레이어 액터의 고양이 집은 상태 해제
 		isHoldingCat = false;
 	}
-
-	//-------------------------------------------------test code----------------------------------------------//
-	//std::string actorPosition = "(" + std::to_string(position.x) + ", " + std::to_string(position.y) + ")";
-	//Renderer::GetRenderer().Submit(actorPosition, Vector2(20, 20), Color::White, 5);
-
-	//std::string isHoldingCatString = std::to_string(isHoldingCat);
-	//Renderer::GetRenderer().Submit(isHoldingCatString, Vector2(20, 20), Color::White, 5);
-	// 
-	//-------------------------------------------------test code----------------------------------------------//
 }
 
-//레벨의 액터 리스트에서 현재 마우스 위치와 겹치는 액터가 있는지 검사
 bool Player::CheckCatOnPosition()
 {
 	std::vector<std::shared_ptr<Cat>> catList;

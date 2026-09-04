@@ -15,7 +15,7 @@ Cat::Cat(const Vector2 position, Color color)
 {
 	ChangeImage(Util::LoadImageFromFile("Cat.txt", "../Assets/"));
 
-	moveTimer.SetTargetTime(0.18f);
+	moveTimer.SetTargetTime(0.12f);
 
 	sortingOrder = 1;
 
@@ -28,6 +28,11 @@ void Cat::BeginPlay()
 {
 	if (!mouse) {
 		mouse = FindMouseInLevel();
+	}
+
+	if (gridForPath.empty())
+	{
+		gridForPath = std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetGridForPath();
 	}
 }
 
@@ -58,14 +63,11 @@ void Cat::Tick(float deltaTime)
 
 		//이 연산을 Tick에서 매번 수행하면 혹시나 벽과 겹치는 상황을 없앨 수 있지만, 매 Tick마다 연산을 진행하여 성능이 떨어질 수 있음 -> 고민해볼 문제
 
-		if(moveTimer.IsTimeOut())
-		{
-			MoveToMouse();
-			moveTimer.Reset();
-		}
+		MoveToMouse();
 	}
 	else
 	{
+		//플레이어에게 잡힌 상태면 마우스 위치 따라가기
 		if (!isSetOffset)
 		{
 			curOffset = CalculateOffset(GetMousePosition());
@@ -76,9 +78,10 @@ void Cat::Tick(float deltaTime)
 	}
 
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
-	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+	if (ISDEBUGMOD)
 	{
-		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Red, 5);
+		// 피봇 위치 화면에 표시
+		Renderer::GetRenderer().Submit(" ", pivot, Color::B_Purple, 7);
 
 		if (isHolded)
 		{
@@ -96,38 +99,39 @@ void Cat::OnCollision(const std::shared_ptr<Actor>&other)
 
 }
 
-//A* 알고리즘으로 쥐를 향해 이동하는 함수
 void Cat::MoveToMouse()
 {
 	assert(mouse && "mouse should not be null");
 
 	//플레이어에게 붙잡힌 상태가 아니라면
-
-	//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
-
-	//mouse를 향해 최적 경로로 한칸 이동
-
 	if (!isHolded)
 	{
+		//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
 		path.clear();
-		std::vector<std::vector<int>> grid = std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetGridForPath();
-		path = catPathFinder.FindPath(pivot, mouse->GetPivot(), grid);
+		path = catPathFinder.FindPath(pivot, mouse->GetPivot(), gridForPath);
 
-		//디버그 모드인 경우 경로 그리기
-		if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
+		//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
+		if (ISDEBUGMOD)
 		{
-			catPathFinder.DisplayPath(grid, path);
+			//디버그 모드인 경우 경로 그리기
+			catPathFinder.DisplayPath(gridForPath, path);
 		}
+		//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 
-		//위치를 찾은 경로의 다음 픽셀로 변경
-		if (path.size() > 1)
+		// 매 프레임마다 이동은 지나치게 빠르므로 이동은 제한 시간을 두고 이동한다.
+		if(moveTimer.IsTimeOut())
 		{
-			position = path[1] - Vector2((int)(GetWidth() / 2), (int)(GetHeight() / 2));
+			// 피봇이 mouse의 피봇과 완전히 겹치는 경우 path의 size는 1이다(자기 자신의 위치만 들어있음)
+			if (path.size() > 1)
+			{
+				// mouse를 향해 최적 경로로 한칸 이동
+				position = path[1] - Vector2((int)(GetWidth() / 2), (int)(GetHeight() / 2));
+			}
+			moveTimer.Reset();
 		}
 	}
 }
 
-//마우스 커서 위치를 받아서 고양이 위치를 이동시킬 함수
 Craft::Vector2 Cat::GetMousePosition()
 {
 	return Input::Get().GetMousePosition();
@@ -145,7 +149,6 @@ std::shared_ptr<Mouse> Cat::FindMouseInLevel()
 	return mouse;
 }
 
-//고양이가 플레이어에게 잡힌 경우 마우스 커서를 따라가도록 함
 Vector2 Cat::CalculateOffset(Vector2 mousePosition)
 {
 

@@ -101,6 +101,10 @@ namespace Craft
 		inline void ChangeIsActorStopedState() { isActorStoped = !isActorStoped; }
 
 		inline void IsActorStoped() { if (isActorStoped) return; }
+
+	protected:
+		// 디버그 모드인지 확인하기 위한 조건식이 지나치게 길어서 매크로 함수로 정의
+#define ISDEBUGMOD (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
 	
 	protected:
 		//BeginPlayer 이벤트 처리 여부 플래그

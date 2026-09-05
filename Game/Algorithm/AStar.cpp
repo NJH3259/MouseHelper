@@ -38,6 +38,8 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 		{
 			return {};
 		}
+
+		return {};
 	}
 
 	if (grid[startPos.y][startPos.x] == (int)TileType::Wall || grid[destinationPos.y][destinationPos.x] == (int)TileType::Wall)

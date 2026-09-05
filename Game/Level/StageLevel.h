@@ -66,6 +66,7 @@ protected:
 		else
 		{
 			Renderer::GetRenderer().SubmitTilemap(collisionGrid, (0, 0), 4);
+			Renderer::GetRenderer().Submit("On Debug Mod", (0, 0), Color::White, 9);
 		}
 	}
 

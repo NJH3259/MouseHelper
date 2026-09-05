@@ -27,7 +27,7 @@ private:
 	// 그리드에서 벽으로 표시된 부분(1) 위치를 기준으로 actorSize/2 만큼 두껍게 만듬
 	static std::vector<std::vector<int>> ExpandGrid(const std::vector<std::vector<int>>& grid, const Vector2 actorSize)
 	{
-		Vector2 offset = CalculateOffset(actorSize);
+		std::vector<Vector2> offset = CalculateOffset(actorSize);
 
 		// 반환할 newGrid생성
 		std::vector<std::vector<int>> newGrid = {};
@@ -49,7 +49,7 @@ private:
 				if (grid[y][x] == (int)TileType::Wall)
 				{
 					// 벽 기준 offset만큼 확장, 범위 밖인 경우에는 확장하지 않음
-					for (int iy = y - offset.y; iy <= y + offset.y; ++iy)
+					for (int iy = y - offset[1].x; iy <= y + offset[1].y; ++iy)
 					{
 						// y범위가 바깥으로 나간 경우
 						if (iy < 0 || iy > gridYSize - 1)
@@ -58,7 +58,7 @@ private:
 						}
 
 						// x범위가 바깥으로 나간 경우
-						for (int ix = x - offset.x; ix <= x + offset.x; ++ix)
+						for (int ix = x - offset[0].x; ix <= x + offset[0].y; ++ix)
 						{
 							if (ix < 0 || ix > gridXSize - 1)
 							{
@@ -75,14 +75,57 @@ private:
 		return newGrid;
 	}
 
-	static Vector2 CalculateOffset(const Vector2 actorSize)
+	static std::vector<Vector2> CalculateOffset(const Vector2 actorSize)
 	{
-		// 액터의 가로길이 혹은 세로 길이가 짝수라 피봇 위치를 기준으로 액터 왼쪽 끝 까지의 거리와 액터 오른쪽 끝 까지의 거리가 다른 경우
-		// 숫자가 큰 쪽으로 맞춤
+		std::vector<Vector2> offset(2);
 
-		Vector2 offset = actorSize / Vector2(2, 2);
+		// 액터의 width와 height가 홀수라 피봇 기준으로 나눠진 길이가 동일한 경우:
+		if(actorSize.x % 2 == 1 && actorSize.y % 2 == 1)
+		{
+			int offsetX = actorSize.x / 2;
+			int offsetY = actorSize.y / 2;
+			
+			offset[0] = Vector2(offsetX, offsetX);
+			offset[1] = Vector2(offsetY, offsetY);
 
-		return offset;
+			return offset;
+		}
+
+		// 액터의 width 혹은 height가 짝수라 피봇 위치를 기준으로 나눠진 길이가 다른 경우
+		else
+		{
+			int offsetX1 = actorSize.x / 2;
+			int offsetY1 = actorSize.y / 2;
+
+			int offsetX2 = 0;
+			int offsetY2 = 0;
+
+			// width만 짝수인 경우
+			if (actorSize.x % 2 == 0 && actorSize.y % 2 == 1)
+			{
+				offsetX2 = offsetX1 - 1;
+				offsetY2 = offsetY1;
+			}
+
+			// height만 짝수인 경우
+			else if(actorSize.x % 2 == 1 && actorSize.y % 2 == 0)
+			{
+				offsetX2 = offsetX1;
+				offsetY2 = offsetY1 - 1;
+			}
+
+			// width와 height 모두 짝수인 경우
+			else
+			{
+				offsetX2 = offsetX1 - 1;
+				offsetY2 = offsetY1 - 1;
+			}
+
+			offset[0] = Vector2(offsetX2, offsetX1);
+			offset[1] = Vector2(offsetY2, offsetY1);
+
+			return offset;
+		}
 	}
 };
 

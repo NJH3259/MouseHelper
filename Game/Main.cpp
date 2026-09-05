@@ -12,5 +12,5 @@ int main()
 	//Game game;
 	//game.Run();
 
-	//Ver.09041238
+	//Ver.09060006
 }	

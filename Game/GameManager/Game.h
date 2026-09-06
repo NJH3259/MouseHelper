@@ -7,7 +7,7 @@
 enum class State
 {
 	Title = 0,
-	GamePlay = 1,
+	Stage1 = 1,
 	Pause = 2,
 	Length
 };
@@ -32,5 +32,5 @@ private:
 	std::vector<std::shared_ptr<Craft::Level>> levelList;
 
 	// 현재 활성화된 레벨의 상태를 나타내는 변수.
-	State state = State::GamePlay;
+	State state = State::Title;
 };

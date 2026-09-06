@@ -35,13 +35,22 @@ private:
 	std::shared_ptr<Mouse> FindMouseInLevel();
 
 	// 마우스를 따라 이동할 때, 액터 생성 위치가 아닌 마우스에 잡힌 위치를 기준으로 이동하는 것 처럼 보이게 하기 위한 offset을 계산하는 함수
-	Craft::Vector2 CalculateOffset(Craft::Vector2 mousePosition);
+	Craft::Vector2 CalculateOffset(const Craft::Vector2 mousePosition);
+
+	// 벽 위에 겹쳐서 위치해 있는지 확인하기 위한 함수
+	bool IsPlacedOnWall(const Craft::Vector2 pivotPosition, const std::vector<std::vector<int>>& gridForPath);
+
+	// 벽 위에 겹친 경우 근처의 Ground로 옮기는 함수
+	void MoveToClosestGround(Craft::Vector2& pivotPosition, const std::vector<std::vector<int>>& gridForPath);
 
 private:
 	std::shared_ptr<Mouse> mouse = nullptr;
 
 	//플레이어에게 잡힌 상태인지 판단을 위한 플래그
 	bool isHolded = false;
+
+	// 마우스에서 잡힌 상태를 땠을 때 벽 혹은 그리드 밖에 떨어졌는지 판정하기 위한 플래그
+	bool prevHolded = false;
 
 	//플레이어에게 잡힌 경우 오프셋 계산을 한 번만 진행하기 위한 플래그
 	bool isSetOffset = false;
@@ -51,6 +60,7 @@ private:
 	//피봇: A*로 경로 탐색을 할 때 중심이 되는 시작 위치
 	Craft::Vector2 pivot = (0, 0);
 
+	// 판정용 그리드
 	std::vector<std::vector<int>> gridForPath = {};
 
 	AStar catPathFinder;

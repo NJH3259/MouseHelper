@@ -5,12 +5,12 @@
 
 int main()
 {
-	Craft::Engine engine;
-	engine.AddNewLevel<Stage1>();
-	engine.Run();
+	//Craft::Engine engine;
+	//engine.AddNewLevel<Stage1>();
+	//engine.Run();
 
-	//Game game;
-	//game.Run();
+	Game game;
+	game.Run();
 
 	//Ver.09060006
 }	

@@ -220,6 +220,7 @@ void Cat::MoveToClosestGround(Craft::Vector2& pivot, const std::vector<std::vect
 		// index * index크기의 사각형을 피봇 위치에 만들어서 사각형 범위 탐색
 		for (int iy = pivot.y - index; iy <= pivot.y + index; ++iy)
 		{
+			// 인덱스가 그리드를 넘어간 경우 다시 탐색
 			if (iy < 0 || iy >= grid.size())
 			{
 				continue;
@@ -227,6 +228,7 @@ void Cat::MoveToClosestGround(Craft::Vector2& pivot, const std::vector<std::vect
 
 			for (int ix = pivot.x - index; ix <= pivot.x + index; ++ix)
 			{
+				// 인덱스가 그리드를 넘어간 경우 다시 탐색
 				if (ix < 0 || ix >= grid[0].size())
 				{
 					continue;
@@ -250,13 +252,13 @@ void Cat::MoveToClosestGround(Craft::Vector2& pivot, const std::vector<std::vect
 					minPosition = Vector2(ix, iy);
 				}
 			}
+		}
 
-			if (found)
-			{
-				pivot = minPosition;
-				return;
-			}
-
+		// 찾은 경우 최적 위치로 pivot을 옮겨서 위치 수정
+		if (found)
+		{
+			pivot = minPosition;
+			return;
 		}
 	}
 }

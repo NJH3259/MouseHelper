@@ -85,6 +85,11 @@ void Mouse::MoveToCheese(int& index)
 {
 	assert(cheese && "cheese should not be null");
 
+	if (index >= path.size())
+	{
+		return;
+	}
+
 	// 매 프레임마다 이동은 지나치게 빠르므로 이동은 제한 시간을 두고 이동한다.
 	if (moveTimer.IsTimeOut())
 	{

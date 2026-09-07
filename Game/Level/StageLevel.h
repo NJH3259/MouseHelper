@@ -36,6 +36,9 @@ public:
 
 	void SetIsLevelFailed() { isLevelFailed = true; }
 
+	int GetManipulationCount() { return mouseManipulationCount; }
+	void UseManipulation() { mouseManipulationCount -= 1; }
+
 protected:
 	virtual void OnInitialized() override
 	{
@@ -62,6 +65,13 @@ protected:
 		WaitStartDelay(deltaTime);
 
 		Level::Tick(deltaTime);
+
+		if (mouseManipulationCount < 0)
+		{
+			assert(mouseManipulationCount >= 0);
+		}
+
+		Renderer::GetRenderer().Submit("Remaining Move Count: " + std::to_string(mouseManipulationCount), Vector2((grid[0].size() - stageClearText.length() / 14) / 2 + 1, 2), Color::BrightWhite, 10);
 
 		// 일시정지는 레벨 시작 후 가능
 		if(isLevelStarted)
@@ -191,6 +201,8 @@ protected:
 	bool isDebugMod = false;
 
 	bool isStageCleared = false;
+
+	int mouseManipulationCount = 0;
 
 	std::string stageClearText;
 

@@ -22,7 +22,7 @@ public:
 
 	std::vector<Vector2> FindPath(const Vector2 startPos, const Vector2 destinationPos, std::vector<std::vector<int>>& grid);
 
-	void DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path, Color color = Color::B_Red);
+	void DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path, Color color = Color::B_Red, const int iteratorIndex = 0);
 
 private:
 	void Clear();

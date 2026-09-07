@@ -19,6 +19,8 @@ Mouse::Mouse(const Vector2 position, Color color)
 
 	isActorStoped = false;
 
+	currentPathIndex = 1;
+
 	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 
 	moveTimer.SetTargetTime(0.3f);
@@ -58,7 +60,7 @@ void Mouse::Tick(float deltaTime)
 	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 
 	//매 프레임마다 최적 A* 경로를 탐색해서 목표를 향해 이동
-	MoveToCheese();
+	MoveToCheese(currentPathIndex);
 
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 	if (std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetDebugMod())
@@ -79,23 +81,33 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 }
 
 // 치즈를 향해 경로를 탐색하고 1픽셀 단위로 이동함. 이동 후 다시 경로 탐색
-void Mouse::MoveToCheese()
+void Mouse::MoveToCheese(int& index)
 {
 	assert(cheese && "cheese should not be null");
+
+	if (index >= path.size())
+	{
+		return;
+	}
 
 	// 매 프레임마다 이동은 지나치게 빠르므로 이동은 제한 시간을 두고 이동한다.
 	if (moveTimer.IsTimeOut())
 	{
-		//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
-		path.clear();
-		path = mousePathFinder.FindPath(pivot, cheese->GetPivot(), gridForPath);
+		////탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
+		//path.clear();
+		//path = mousePathFinder.FindPath(pivot, cheese->GetPivot(), gridForPath);
+		//
+		//// 피봇이 mouse의 피봇과 완전히 겹치는 경우 path의 size는 1이다(자기 자신의 위치만 들어있음)
+		//if (path.size() > 1)
+		//{
+		//	// mouse를 향해 최적 경로로 한칸 이동
+		//	position = path[1] - Vector2((int)(GetWidth() / 2), (int)(GetHeight() / 2));
+		//}
 
-		// 피봇이 mouse의 피봇과 완전히 겹치는 경우 path의 size는 1이다(자기 자신의 위치만 들어있음)
-		if (path.size() > 1)
-		{
-			// mouse를 향해 최적 경로로 한칸 이동
-			position = path[1] - Vector2((int)(GetWidth() / 2), (int)(GetHeight() / 2));
-		}
+		position = path[index] - Vector2((int)(GetWidth() / 2), (int)(GetHeight() / 2));
+
+		index += 1;
+
 		moveTimer.Reset();
 	}
 
@@ -103,7 +115,7 @@ void Mouse::MoveToCheese()
 	if (ISDEBUGMOD)
 	{
 		//디버그 모드인 경우 경로 그리기
-		mousePathFinder.DisplayPath(gridForPath, path, Color::B_Blue);
+		mousePathFinder.DisplayPath(gridForPath, path, Color::B_Blue, index);
 	}
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 }

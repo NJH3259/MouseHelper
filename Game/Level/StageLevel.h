@@ -3,18 +3,35 @@
 #include <Level/Level.h>
 #include <Input/Input.h>
 #include <Util/Timer.h>
+#include <Util/Util.h>
 #include <Render/Renderer.h>
+#include <GameManager/Game.h>
 
 using namespace Craft;
 class StageLevel : public Level
 {
 public:
+	StageLevel()
+	{
+		stageClearText = Util::LoadImageFromFile("StageClear.txt", "../Assets/");
+	}
+
 	bool GetDebugMod() { return isDebugMod; }
 
-	virtual void ResetLevel()
-	{}
+	void ResetLevel()
+	{
+		hasInitialized = false;
+
+		isStageCleared = false;
+
+		actorList.clear();
+
+		OnInitialized();
+	}
 
 	std::vector<std::vector<int>> GetGridForPath() { return collisionGrid; }
+
+	void SetIsStageCleared(bool state) { isStageCleared = state; }
 
 protected:
 	virtual void OnInitialized() override
@@ -58,6 +75,13 @@ protected:
 			isDebugMod = !isDebugMod;
 		}
 
+		// 레벨 클리어 시 UI 출력
+		//if (isStageCleared)
+		{
+			isLevelStoped = true;
+			Renderer::GetRenderer().Submit(stageClearText, Vector2((grid[0].size() - stageClearText.length()/8) / 2 - 10, grid.size() / 2 - 3), Color::Yellow, 10);
+		}
+
 		// 디버그 모드 시 A* 판정용 그리드 표시
 		if (!isDebugMod)
 		{
@@ -66,7 +90,7 @@ protected:
 		else
 		{
 			Renderer::GetRenderer().SubmitTilemap(collisionGrid, (0, 0), 4);
-			Renderer::GetRenderer().Submit("On Debug Mod", (0, 0), Color::White, 9);
+			Renderer::GetRenderer().Submit("On Debug Mod", Vector2(0, 0), Color::White, 9);
 		}
 	}
 
@@ -85,6 +109,13 @@ protected:
 		}
 	}
 
+	void ChangeStage(State levelState)
+	{
+		Game& game = dynamic_cast<Game&>(Engine::Get());
+		game.ResetGameLevel();
+		game.ChangeLevel(levelState);
+	}
+
 protected:
 	Timer startTimer;
 
@@ -93,6 +124,10 @@ protected:
 	bool isLevelStarted = false;
 
 	bool isDebugMod = false;
+
+	bool isStageCleared = false;
+
+	std::string stageClearText;
 
 	std::vector<std::vector<int>> grid;
 	std::vector<std::vector<int>> collisionGrid;

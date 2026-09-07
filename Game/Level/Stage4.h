@@ -3,10 +3,10 @@
 #include <Level/StageLevel.h>
 #include <Math/Vector2.h>
 
-class Stage1 : public StageLevel
+class Stage4 : public StageLevel
 {
 public:
-	Stage1();
+	Stage4();
 
 private:
 	virtual void OnInitialized() override;
@@ -17,4 +17,3 @@ private:
 	Craft::Vector2 catPos1 = Craft::Vector2(150, 10);
 	Craft::Vector2 catPos2 = Craft::Vector2(50, 50);
 };
-

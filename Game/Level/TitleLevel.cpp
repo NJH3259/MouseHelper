@@ -2,12 +2,15 @@
 #include <GameManager/Game.h>
 #include <Input/Input.h>
 #include <Render/Renderer.h>
+#include <Util/Util.h>
 #include <cassert>
 
 using namespace Craft;
 
 TitleLevel::TitleLevel()
 {
+	titleText = Util::LoadImageFromFile("Title.txt", "../Assets/");
+
 	// 메뉴 아이템 생성.
 	itemList.emplace_back(std::make_unique<TitleItem>("Start Game",
 		[]()
@@ -15,10 +18,9 @@ TitleLevel::TitleLevel()
 			//새 게임 시작
 			Game& game = dynamic_cast<Game&>(Engine::Get());
 			game.ResetGameLevel();
-			game.ToggleMenu(State::Stage1);
+			game.ChangeLevel(State::Stage1);
 		}
 	)
-
 	);
 
 	itemList.emplace_back(std::make_unique<TitleItem>(" Quit Game",
@@ -73,7 +75,7 @@ void TitleLevel::Draw()
 {
 
 	// 제목 그리기.
-	Renderer::GetRenderer().Submit("Console Shooting Game", Vector2((Engine::Get().GetWidth()) / 2 - 11, Engine::Get().GetHeight() / 2 - 4));
+	Renderer::GetRenderer().Submit(titleText, Vector2((Engine::Get().GetWidth() - titleText.length()/4) / 2 + 4, Engine::Get().GetHeight() / 2 - 10));
 
 	// 메뉴 아이템 그리기.
 	const int count = static_cast<int>(itemList.size());
@@ -84,6 +86,6 @@ void TitleLevel::Draw()
 			? selectedColor : unselectedColor;
 
 		// 아이템 그리기.
-		Renderer::GetRenderer().Submit(itemList[ix]->text, Vector2((Engine::Get().GetWidth() - itemList[ix]->text.length() - 1) / 2, Engine::Get().GetHeight() / 2 + ix), textColor);
+		Renderer::GetRenderer().Submit(itemList[ix]->text, Vector2((Engine::Get().GetWidth() - itemList[ix]->text.length() - 10) / 2, Engine::Get().GetHeight() / 2 + ix), textColor);
 	}
 }

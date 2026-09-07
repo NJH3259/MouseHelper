@@ -11,6 +11,9 @@ public:
 	Cheese(const Vector2 position, Color color);
 
 	inline Vector2 GetPivot() { return pivot; }
+	
+private:
+	virtual void Tick(float deltaTime) override;
 
 private:
 	virtual void OnCollision(const std::shared_ptr<Actor>& other) override;

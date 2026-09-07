@@ -174,8 +174,7 @@ void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<V
 }
 
 void AStar::Clear()
-{
-	for (Node* node : allocatedNodes)
+{	for (Node* node : allocatedNodes)
 	{
 		delete node;
 	}

@@ -2,6 +2,9 @@
 #include <Level/StageLevel.h>
 #include <Level/TitleLevel.h>
 #include <Level/Stage1.h>
+#include <Level/Stage2.h>
+#include <Level/Stage3.h>
+#include <Level/Stage4.h>
 
 #include <memory>
 
@@ -9,6 +12,9 @@ Game::Game()
 {
 	levelList.emplace_back(std::make_shared<TitleLevel>());
 	levelList.emplace_back(std::make_shared<Stage1>());
+	levelList.emplace_back(std::make_shared<Stage2>());
+	levelList.emplace_back(std::make_shared<Stage3>());
+	levelList.emplace_back(std::make_shared<Stage4>());
 
 	// 시작 상태 설정.
 	state = State::Title;
@@ -17,7 +23,7 @@ Game::Game()
 	mainLevel = levelList[(int)state];
 }
 
-void Game::ToggleMenu(State gameState)
+void Game::ChangeLevel(State gameState)
 {
 	int stateIndex = static_cast<int>(gameState);
 

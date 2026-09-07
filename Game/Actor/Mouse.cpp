@@ -70,8 +70,8 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 	//충돌한 액터 타입이 Cheese인 경우
 	if (Cast<Cheese>(other))
 	{
-		GetOwner()->SetIsLevelStoped(true);
-		//todo: 레벨 클리어 처리
+		// 레벨 클리어 처리
+		std::dynamic_pointer_cast<StageLevel>(GetOwner())->SetIsStageCleared(true);
 	}
 }
 

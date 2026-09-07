@@ -180,14 +180,6 @@ namespace Craft
 
 	void Engine::Tick(float deltaTime)
 	{
-		//deltaTime 출력.
-		//std::cout
-		//	<< "Engine::Tick() - deltaTime: "
-		//	<< deltaTime
-		//	<< " | FPS: "
-		//	<< (1.0f/deltaTime)
-		//	<< "\n";
-
 		if (!mainLevel) { //조건들은 분리해서 검사하는쪽이 depth도 낮고 가독성도 좋음
 			return;
 		}

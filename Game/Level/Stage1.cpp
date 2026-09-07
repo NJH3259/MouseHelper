@@ -33,7 +33,7 @@ void Stage1::Tick(float deltaTime)
 
 	if (isStageCleared)
 	{
-		if (Input::Get().GetKeyDown('N'))
+		if (Input::Get().GetKeyDown(VK_LBUTTON))
 		{
 			ChangeStage(State::Stage2);
 		}

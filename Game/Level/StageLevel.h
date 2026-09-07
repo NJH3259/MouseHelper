@@ -76,6 +76,11 @@ protected:
 			isDebugMod = !isDebugMod;
 		}
 
+		if (Input::Get().GetKeyDown('N'))
+		{
+			isStageCleared = true;
+		}
+
 		// 레벨 클리어 시 UI 출력
 		if (isStageCleared)
 		{
@@ -111,7 +116,7 @@ protected:
 				isLevelStarted = true;
 			}
 			std::string leftTimeString = "Until Start: " + std::to_string(static_cast<int>(startDelay - startTimer.GetElapsedTime()) + 1);
-			Renderer::GetRenderer().Submit(leftTimeString, Vector2(3, 4), Color::White, 5);
+			Renderer::GetRenderer().Submit(leftTimeString, Vector2(grid[0].size()/ 2 - 4, grid.size() / 2), Color::White, 5);
 		}
 	}
 

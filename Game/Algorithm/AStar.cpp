@@ -152,7 +152,7 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 	return {};
 }
 
-void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path, Color color)
+void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path, Color color, const int iteratorIndex)
 {
 	// 경로 표시를 위해 visited를 ground로 초기화
 	ClearVisualization(grid);
@@ -160,7 +160,7 @@ void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<V
 	int iterator = 0;
 	for (const Vector2 position : path)
 	{
-		if (iterator == 0 || iterator == path.size())
+		if (iterator == 0 || iterator < iteratorIndex || iterator == path.size())
 		{
 			++iterator;
 			continue;

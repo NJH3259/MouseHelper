@@ -110,7 +110,7 @@ void Mouse::MoveToCheese(int& index)
 	if (ISDEBUGMOD)
 	{
 		//디버그 모드인 경우 경로 그리기
-		mousePathFinder.DisplayPath(gridForPath, path, Color::B_Blue);
+		mousePathFinder.DisplayPath(gridForPath, path, Color::B_Blue, index);
 	}
 	//-----------------------------------------------------------Debug Mod--------------------------------------------------------//
 }

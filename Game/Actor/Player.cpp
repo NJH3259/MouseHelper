@@ -24,6 +24,7 @@ void Player::Tick(float deltaTime)
 
 	if (Input::Get().GetKeyDown(VK_LBUTTON))
 	{
+		if(std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetManipulationCount() > 0)
 		//현재 마우스 커서 위치에 고양이 액터가 있는지 확인
 		//고양이 액터가 있으면
 		if (CheckCatOnPosition())
@@ -77,6 +78,8 @@ void Player::Tick(float deltaTime)
 
 		//플레이어 액터의 고양이 집은 상태 해제
 		isHoldingCat = false;
+
+		std::dynamic_pointer_cast<StageLevel>(GetOwner())->UseManipulation();
 	}
 }
 

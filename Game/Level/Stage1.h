@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Level/StageLevel.h>
 #include <Math/Vector2.h>

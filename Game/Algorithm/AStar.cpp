@@ -1,4 +1,4 @@
-#define NOMINMAX
+﻿#define NOMINMAX
 #include "AStar.h"
 #include "TileType.h"
 #include <Render/Renderer.h>

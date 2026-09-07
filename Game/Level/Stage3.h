@@ -18,4 +18,5 @@ private:
 	Craft::Vector2 mousePos = Craft::Vector2(20, 5);
 	Craft::Vector2 catPos1 = Craft::Vector2(27, 61);
 	Craft::Vector2 catPos2 = Craft::Vector2(200, 2);
+	Craft::Vector2 catPos3 = Craft::Vector2(100, 33);
 };

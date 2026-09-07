@@ -15,7 +15,7 @@ Cat::Cat(const Vector2 position, Color color)
 {
 	ChangeImage(Util::LoadImageFromFile("Cat.txt", "../Assets/"));
 
-	moveTimer.SetTargetTime(0.18f);
+	moveTimer.SetTargetTime(0.14f);
 
 	sortingOrder = 1;
 

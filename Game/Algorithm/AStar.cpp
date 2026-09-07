@@ -50,9 +50,7 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 	ClearVisualization(grid);
 
 	startNode = CreateNode(startPos);
-	grid[startPos.y][startPos.x] = (int)TileType::Start;
 	targetNode = CreateNode(destinationPos);
-	grid[destinationPos.y][destinationPos.x] = (int)TileType::Goal;
 
 	startNode->gCost = 0.0f;
 	startNode->hCost = CalculateHeuristic(startPos, destinationPos);

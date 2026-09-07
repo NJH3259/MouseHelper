@@ -5,10 +5,6 @@
 
 int main()
 {
-	//Craft::Engine engine;
-	//engine.AddNewLevel<Stage1>();
-	//engine.Run();
-
 	Game game;
 	game.Run();
 

@@ -34,6 +34,8 @@ public:
 	void SetIsStageCleared(bool state) { isStageCleared = state; }
 	bool GetIsStageCleared() { return isStageCleared; }
 
+	void SetIsLevelFailed() { isLevelFailed = true; }
+
 protected:
 	virtual void OnInitialized() override
 	{
@@ -44,6 +46,8 @@ protected:
 		startTimer.Reset();
 
 		isLevelPaused = false;
+
+		isLevelFailed = false;
 
 		isLevelStoped = true;
 		isLevelStarted = false;
@@ -78,6 +82,12 @@ protected:
 			}
 		}
 
+		if (isLevelFailed)
+		{
+			isLevelStoped = true;
+			isLevelPaused = true;
+		}
+
 		if(Input::Get)
 
 		// 디버그 모드 토글 단축키
@@ -93,7 +103,14 @@ protected:
 
 		if (isLevelPaused)
 		{
-			Renderer::GetRenderer().Submit("Pause", Vector2((grid[0].size() - stageClearText.length() / 14) / 2 + 10, grid.size() / 2 - 3), Color::BrightWhite, 10);
+			if (isLevelFailed)
+			{
+				Renderer::GetRenderer().Submit("You Lose", Vector2((grid[0].size() - stageClearText.length() / 14) / 2 + 8, grid.size() / 2 - 3), Color::BrightWhite, 10);
+			}
+			else
+			{
+				Renderer::GetRenderer().Submit("Pause", Vector2((grid[0].size() - stageClearText.length() / 14) / 2 + 10, grid.size() / 2 - 3), Color::BrightWhite, 10);
+			}
 			Renderer::GetRenderer().Submit("Press ESC to Resume Game", Vector2((grid[0].size() - stageClearText.length() / 14) / 2 + 1, grid.size() / 2), Color::BrightWhite, 10);
 			Renderer::GetRenderer().Submit("Press R to Restart Stage", Vector2((grid[0].size() - stageClearText.length() / 14) / 2 + 1, grid.size() / 2 + 1), Color::BrightWhite, 10);
 			Renderer::GetRenderer().Submit("Press T to Return to Title", Vector2((grid[0].size() - stageClearText.length() / 14) / 2, grid.size() / 2 + 2), Color::BrightWhite, 10);
@@ -165,7 +182,11 @@ protected:
 
 	bool isLevelStarted = false;
 
+	// 레벨 일시 정지를 위한 플래그, 레벨 멈춤 상태와는 별도로 일시 정지 처리만을 위함
 	bool isLevelPaused = false;
+
+	// 레벨 실패 처리를 위한 플래그
+	bool isLevelFailed = false;
 
 	bool isDebugMod = false;
 

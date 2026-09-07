@@ -20,7 +20,7 @@ void Stage1::OnInitialized()
 	
 	collisionGrid = GridExpander::MakeAStarGrid(grid, Vector2(11, 6));
 
-	mouseManipulationCount = 8;
+	mouseManipulationCount = 6;
 
 	SpawnActor<Player>();
 	SpawnActor<Cheese>(cheesePos, Craft::Color::Yellow);

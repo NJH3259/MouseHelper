@@ -25,6 +25,7 @@ void Stage3::OnInitialized()
 	SpawnActor<Mouse>(mousePos, Craft::Color::White);
 	SpawnActor<Cat>(catPos1, Craft::Color::White);
 	SpawnActor<Cat>(catPos2, Craft::Color::White);
+	SpawnActor<Cat>(catPos3, Craft::Color::White);
 }
 
 void Stage3::Tick(float deltaTime)

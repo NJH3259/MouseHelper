@@ -16,7 +16,7 @@ void Player::Tick(float deltaTime)
 	//if (ISDEBUGMOD)
 	{
 		std::string fpsString = "fps: " + std::to_string((1.0f / deltaTime));
-		Renderer::GetRenderer().Submit(fpsString, Vector2(3, 8), Color::White, 8);
+		Renderer::GetRenderer().Submit(fpsString, Vector2(200, 0), Color::White, 8);
 	}
 
 	//플레이어 액터는 보이지 않지만 위치는 마우스 위치임

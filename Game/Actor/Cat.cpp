@@ -40,7 +40,10 @@ void Cat::Tick(float deltaTime)
 {
 	Actor::Tick(deltaTime);
 
-	IsActorStoped();
+	if (isActorStoped)
+	{
+		return;
+	}
 
 	moveTimer.Tick(deltaTime);
 

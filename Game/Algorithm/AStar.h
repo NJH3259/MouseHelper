@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Node.h"
 #include <Math/Color.h>

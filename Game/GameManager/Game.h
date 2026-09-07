@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Engine/Engine.h>
 #include <vector>
@@ -8,7 +8,10 @@ enum class State
 {
 	Title = 0,
 	Stage1 = 1,
-	Pause = 2,
+	Stage2 = 2,
+	Stage3 = 3,
+	Stage4 = 4,
+	Pause = 5,
 	Length
 };
 
@@ -20,7 +23,7 @@ public:
 	~Game() = default;
 
 	// 메뉴/게임 레벨을 전환하는 함수.
-	void ToggleMenu(State gameState);
+	void ChangeLevel(State gameState);
 
 	void ResetGameLevel();
 

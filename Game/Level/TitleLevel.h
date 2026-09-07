@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Level/Level.h>
 #include <string>
@@ -43,4 +43,6 @@ private:
 
 	// 메뉴 아이템 배열.
 	std::vector<std::unique_ptr<TitleItem>> itemList;
+
+	std::string titleText;
 };

@@ -1,4 +1,4 @@
-#include "Mouse.h"
+﻿#include "Mouse.h"
 #include <Actor/Cheese.h>
 #include <Actor/Cat.h>
 #include <Level/StageLevel.h>
@@ -49,8 +49,11 @@ void Mouse::Tick(float deltaTime)
 
 	moveTimer.Tick(deltaTime);
 
-	//게임 스테이지 패배 및 승리 시 Actor들 멈춤
-	IsActorStoped();
+	//게임 스테이지 패배 및 승리 시 Actor 멈춤
+	if (isActorStoped)
+	{
+		return;
+	}
 
 	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 
@@ -70,8 +73,8 @@ void Mouse::OnCollision(const std::shared_ptr<Actor>&other)
 	//충돌한 액터 타입이 Cheese인 경우
 	if (Cast<Cheese>(other))
 	{
-		GetOwner()->SetIsLevelStoped(true);
-		//todo: 레벨 클리어 처리
+		// 레벨 클리어 처리
+		std::dynamic_pointer_cast<StageLevel>(GetOwner())->SetIsStageCleared(true);
 	}
 }
 

@@ -11,6 +11,8 @@ public:
 private:
 	virtual void OnInitialized() override;
 
+	virtual void Tick(float deltaTime) override;
+
 private:
 	Craft::Vector2 cheesePos = Craft::Vector2(120, 55);
 	Craft::Vector2 mousePos = Craft::Vector2(25, 5);

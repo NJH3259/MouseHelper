@@ -49,8 +49,11 @@ void Mouse::Tick(float deltaTime)
 
 	moveTimer.Tick(deltaTime);
 
-	//게임 스테이지 패배 및 승리 시 Actor들 멈춤
-	IsActorStoped();
+	//게임 스테이지 패배 및 승리 시 Actor 멈춤
+	if (isActorStoped)
+	{
+		return;
+	}
 
 	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 

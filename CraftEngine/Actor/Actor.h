@@ -98,9 +98,7 @@ namespace Craft
 			image = newImage;
 		}
 
-		inline void ChangeIsActorStopedState() { isActorStoped = !isActorStoped; }
-
-		inline void IsActorStoped() { if (isActorStoped) return; }
+		inline void ChangeIsActorStopedState(bool state) { isActorStoped = state; }
 
 	protected:
 		// 디버그 모드인지 확인하기 위한 조건식이 지나치게 길어서 매크로 함수로 정의

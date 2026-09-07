@@ -32,6 +32,7 @@ public:
 	std::vector<std::vector<int>> GetGridForPath() { return collisionGrid; }
 
 	void SetIsStageCleared(bool state) { isStageCleared = state; }
+	bool GetIsStageCleared() { return isStageCleared; }
 
 protected:
 	virtual void OnInitialized() override
@@ -76,10 +77,15 @@ protected:
 		}
 
 		// 레벨 클리어 시 UI 출력
-		//if (isStageCleared)
+		if (isStageCleared)
 		{
-			isLevelStoped = true;
+			for (auto actor : actorList)
+			{
+				actor->ChangeIsActorStopedState(true);
+			}
+
 			Renderer::GetRenderer().Submit(stageClearText, Vector2((grid[0].size() - stageClearText.length()/8) / 2 - 10, grid.size() / 2 - 3), Color::Yellow, 10);
+			Renderer::GetRenderer().Submit("Press Mouse L Button To Play Next Stage", Vector2((grid[0].size() - stageClearText.length() / 8) / 2, grid.size() / 2 + 3), Color::BrightWhite, 10);
 		}
 
 		// 디버그 모드 시 A* 판정용 그리드 표시

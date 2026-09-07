@@ -25,4 +25,19 @@ void Stage2::OnInitialized()
 	SpawnActor<Mouse>(mousePos, Craft::Color::White);
 	SpawnActor<Cat>(catPos1, Craft::Color::White);
 	SpawnActor<Cat>(catPos2, Craft::Color::White);
+	SpawnActor<Cat>(catPos3, Craft::Color::White);
+	SpawnActor<Cat>(catPos4, Craft::Color::White);
+}
+
+void Stage2::Tick(float deltaTime)
+{
+	StageLevel::Tick(deltaTime);
+
+	if (isStageCleared)
+	{
+		if (Input::Get().GetKeyDown('N'))
+		{
+			ChangeStage(State::Stage3);
+		}
+	}
 }

@@ -260,7 +260,8 @@ void Cat::MoveToClosestGround(Craft::Vector2& pivot, const std::vector<std::vect
 		// 찾은 경우 최적 위치로 pivot을 옮겨서 위치 수정
 		if (found)
 		{
-			pivot = minPosition;
+			Vector2 moveVector = minPosition - pivot;
+			this->position = position + moveVector;
 			return;
 		}
 	}

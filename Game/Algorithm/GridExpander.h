@@ -65,11 +65,6 @@ private:
 								continue;
 							}
 
-							if (grid[iy][ix] == (int)TileType::Wall)
-							{
-								continue;
-							}
-
 							newGrid[iy][ix] = (int)TileType::Wall;
 						}
 					}

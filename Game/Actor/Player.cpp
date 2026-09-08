@@ -70,6 +70,7 @@ void Player::Tick(float deltaTime)
 		if(currentCat)
 		{
 			currentCat->ReleaseIsHoldedState();
+			currentCat = nullptr;
 		}
 
 		//현재 마우스 위치를 집은 고양이 액터 위치로 지정 -> 고양이의 Tick()에서 실행 중

@@ -43,5 +43,7 @@ private:
 	std::vector<Vector2> path;
 
 	Timer moveTimer;
+
+	Timer debugTimer;
 };
 

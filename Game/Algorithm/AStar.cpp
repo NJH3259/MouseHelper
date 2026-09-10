@@ -56,8 +56,7 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 	startNode->hCost = CalculateHeuristic(startPos, destinationPos);
 	startNode->fCost = startNode->gCost + startNode->hCost;
 
-	openList.emplace_back(startNode);
-	std::push_heap(openList.begin(), openList.end(), CompareNode);
+	HeapPush(startNode);
 
 	// 편의를 위해 사전 비용 설정
 	const float diagonalCost = 1.41421f;
@@ -74,71 +73,68 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 
 	while (!openList.empty())
 	{
-		// 힙 최상단(front) = 현재 fCost 최솟값 노드
-		std::pop_heap(openList.begin(), openList.end(), CompareNode);
-		Node* curNode = openList.back();
-		openList.pop_back(); // 벡터에서 실제로 제거 (priority_queue.pop()과 동일 효과)
-
-		// 목표 노드인지 확인
-		if (IsDestination(curNode))
+		while (!openList.empty())
 		{
-			return ConstructPath(curNode);
-		}
+			Node* curNode = HeapPop();
 
-		closedList.emplace_back(curNode);
-
-		// 인접한 노드 탐색
-		for (const Direction& direction : directions)
-		{
-			Vector2 newPosition = curNode->position + direction.position;
-
-			if (!IsInRange(newPosition.x, newPosition.y, grid))
+			if (IsDestination(curNode))
 			{
-				continue;
+				return ConstructPath(curNode);
 			}
 
-			if (grid[newPosition.y][newPosition.x] == (int)TileType::Wall)
-			{
-				continue;
-			}
+			closedList.emplace_back(curNode);
 
-			if (IsInClosedList(newPosition.x, newPosition.y))
+			for (const Direction& direction : directions)
 			{
-				continue;
-			}
+				Vector2 newPosition = curNode->position + direction.position;
 
-			float newGCost = curNode->gCost + direction.cost;
-
-			Node* openNode = FindOpenNode(newPosition.x, newPosition.y);
-			if (openNode)
-			{
-				if (newGCost < openNode->gCost)
+				if (!IsInRange(newPosition.x, newPosition.y, grid))
 				{
-					openNode->gCost = newGCost;
-					openNode->fCost = openNode->gCost + openNode->hCost;
-					openNode->parentNode = curNode;
-
-					// 힙 중간에 있는 원소 값이 바뀌었으므로 힙 구조가 깨질 수 있음
-					// → 전체 재정렬 (아래 "주의사항" 참고)
-					std::make_heap(openList.begin(), openList.end(), CompareNode);
+					continue;
 				}
 
-				continue;
+				if (grid[newPosition.y][newPosition.x] == (int)TileType::Wall)
+				{
+					continue;
+				}
+
+				if (IsInClosedList(newPosition.x, newPosition.y))
+				{
+					continue;
+				}
+
+				float newGCost = curNode->gCost + direction.cost;
+
+				Node* openNode = FindOpenNode(newPosition.x, newPosition.y);
+				if (openNode)
+				{
+					if (newGCost < openNode->gCost)
+					{
+						openNode->gCost = newGCost;
+						openNode->fCost = openNode->gCost + openNode->hCost;
+						openNode->parentNode = curNode;
+
+						// 힙 전체 재정렬(make_heap) 대신, 이 노드만 O(log n)으로 재정렬
+						HeapDecreaseKey(openNode);
+					}
+
+					continue;
+				}
+
+				Node* neighborNode = CreateNode(newPosition, curNode);
+
+				neighborNode->gCost = newGCost;
+				neighborNode->hCost = CalculateHeuristic(neighborNode->position, targetNode->position);
+				neighborNode->fCost = neighborNode->gCost + neighborNode->hCost;
+
+				HeapPush(neighborNode);
 			}
-
-			Node* neighborNode = CreateNode(newPosition, curNode);
-
-			neighborNode->gCost = newGCost;
-			neighborNode->hCost = CalculateHeuristic(neighborNode->position, targetNode->position);
-			neighborNode->fCost = neighborNode->gCost + neighborNode->hCost;
-
-			openList.emplace_back(neighborNode);
-			std::push_heap(openList.begin(), openList.end(), CompareNode);
 		}
-	}
 
-	//실패 시 빈 경로 반환
-	return {};
+
+		//실패 시 빈 경로 반환
+		return {};
+	}
 }
 
 void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<Vector2>& path, Color color, const int iteratorIndex)
@@ -299,12 +295,109 @@ void AStar::ClearVisualization(std::vector<std::vector<int>>& grid)
 	}
 }
 
-bool AStar::CompareNode(const Node* a, const Node* b)
+bool AStar::IsLower(const Node* a, const Node* b) const
 {
+	// fCost가 작은 쪽이 우선이고
 	if (a->fCost != b->fCost)
 	{
-		return a->fCost > b->fCost; // min-heap이 되도록 반전
+		return a->fCost < b->fCost;
 	}
 
-	return a->hCost > b->hCost;
+	// fCost가 같으면 hCost가 작은 쪽을 우선으로 함
+	return a->hCost < b->hCost;
+}
+
+void AStar::HeapPush(Node* node)
+{
+	// 오픈 리스트에 추가
+	openList.emplace_back(node);
+
+	// 위치 힙 인덱스에 기록
+	node->heapIndex = static_cast<int>(openList.size()) - 1;
+
+	// Heapify 진행
+	HeapSiftUp(node->heapIndex);
+}
+
+Node* AStar::HeapPop()
+{
+	// 오픈 리스트의 루트를 꺼내고 맨 끝 노드를 루트로 이동
+	Node* root = openList[0];
+	Node* last = openList.back();
+
+	openList[0] = last;
+	last->heapIndex = 0;
+	openList.pop_back();
+
+	// 꺼낸 루트는 Open상태가 아니므로 힙 인덱스 초기화
+	root->heapIndex = -1;
+
+	if (!openList.empty())
+	{
+		HeapSiftDown(0);
+	}
+
+	return root;
+}
+
+void AStar::HeapSiftUp(int index)
+{
+	while (index > 0)
+	{
+		int parentIndex = (index - 1) / 2;
+
+		// 부모가 더(또는 동등하게) 우선순위 높으면 더 올라갈 필요 없음 → 종료
+		if (!IsLower(openList[index], openList[parentIndex]))
+		{
+			break;
+		}
+
+		std::swap(openList[index], openList[parentIndex]);
+		openList[index]->heapIndex = index;
+		openList[parentIndex]->heapIndex = parentIndex;
+
+		index = parentIndex;
+	}
+}
+
+void AStar::HeapSiftDown(int index)
+{
+	int size = static_cast<int>(openList.size());
+
+	while (true)
+	{
+		int left = index * 2 + 1;
+		int right = index * 2 + 2;
+		int smallest = index;
+
+		// 왼쪽 자식이 존재하고 현재보다 우선순위 높으면 후보로 선택
+		if (left < size && IsLower(openList[left], openList[smallest]))
+		{
+			smallest = left;
+		}
+		// 오른쪽 자식이 존재하고 지금까지의 후보보다 우선순위 높으면 갱신
+		if (right < size && IsLower(openList[right], openList[smallest]))
+		{
+			smallest = right;
+		}
+
+		// 자식들보다 현재 노드가 이미 우선순위 높으면 힙 조건 만족 → 종료
+		if (smallest == index)
+		{
+			break;
+		}
+
+		std::swap(openList[index], openList[smallest]);
+		openList[index]->heapIndex = index;
+		openList[smallest]->heapIndex = smallest;
+
+		index = smallest;
+	}
+}
+
+// 오픈 리스트의 노드의 gCost/fCost가 더 작게 갱신됬을 때 호출
+// 비용 감소 -> 우선순위 증가 -> 트리 구조 상 위쪽으로 이동
+void AStar::HeapDecreaseKey(Node * node)
+{
+	HeapSiftUp(node->heapIndex);
 }

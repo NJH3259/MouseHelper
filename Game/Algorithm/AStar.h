@@ -48,7 +48,24 @@ private:
 
 	void ClearVisualization(std::vector<std::vector<int>>& grid);
 	
-	static bool CompareNode(const Node* a, const Node* b);
+	// Heapify
+	// 두 노드 중 어느 쪽이 힙에서 더 높은 우선순위를 갖는지 비교
+	bool IsLower(const Node* a, const Node* b) const;
+
+	// 새 이웃 노드를 OpenList 맨 끝에 추가 후 힙 정렬
+	void HeapPush(Node* node);
+
+	// fCost가 가장 작은 root노드를 꺼내고 마지막 원소를 루트로 옮긴 후 다시 힙 정렬, 다음 탐색 노드 꺼낼 때 호출
+	Node* HeapPop();
+
+	// 자식 노드가 부모 노드보다 우선순위 높은 동안 계속 교환
+	void HeapSiftUp(int index);
+	
+	// 부모 노드가 자식 노드보다 우선순위 낮은 동안 계속 교환
+	void HeapSiftDown(int index);
+
+	// gCost 갱신 후 해당 노드만 sift up으로 재정렬
+	void HeapDecreaseKey(Node* node);
 
 private:
 	std::vector<Node*> allocatedNodes;

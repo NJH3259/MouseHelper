@@ -19,4 +19,5 @@ public:
 
 	Node* parentNode = nullptr;
 
+	int heapIndex = -1;
 };

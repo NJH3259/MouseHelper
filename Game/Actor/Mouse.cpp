@@ -41,8 +41,11 @@ void Mouse::BeginPlay()
 		gridForPath = std::dynamic_pointer_cast<StageLevel>(GetOwner())->GetGridForPath();
 	}
 
+	debugTimer.CheckStartStat();
 	path.clear();
 	path = mousePathFinder.FindPath(pivot, cheese->GetPivot(), gridForPath);
+	debugTimer.CheckEndStat();
+	debugTimer.GetDebugTime();
 }
 
 void Mouse::Tick(float deltaTime)

@@ -23,7 +23,7 @@ Mouse::Mouse(const Vector2 position, Color color)
 
 	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 
-	moveTimer.SetTargetTime(0.3f);
+	moveTimer.SetTargetTime(0.2f);
 }
 
 void Mouse::BeginPlay()

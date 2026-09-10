@@ -57,6 +57,7 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 	startNode->fCost = startNode->gCost + startNode->hCost;
 
 	openList.emplace_back(startNode);
+	std::push_heap(openList.begin(), openList.end(), CompareNode);
 
 	// 편의를 위해 사전 비용 설정
 	const float diagonalCost = 1.41421f;
@@ -73,28 +74,15 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 
 	while (!openList.empty())
 	{
-		Node* curNode = openList[0];
-		for (Node* node : openList)
-		{
-			// 탐색할 노드 선택
-			if (node->fCost < curNode->fCost || (node->fCost == curNode->fCost && node->hCost < curNode->hCost))
-			{
-				curNode = node;
-			}
-		}
+		// 힙 최상단(front) = 현재 fCost 최솟값 노드
+		std::pop_heap(openList.begin(), openList.end(), CompareNode);
+		Node* curNode = openList.back();
+		openList.pop_back(); // 벡터에서 실제로 제거 (priority_queue.pop()과 동일 효과)
 
 		// 목표 노드인지 확인
 		if (IsDestination(curNode))
 		{
 			return ConstructPath(curNode);
-		}
-
-		//현재 노드 처리
-		auto iterator = std::find(openList.begin(), openList.end(), curNode);
-
-		if (iterator != openList.end())
-		{
-			openList.erase(iterator);
 		}
 
 		closedList.emplace_back(curNode);
@@ -104,7 +92,6 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 		{
 			Vector2 newPosition = curNode->position + direction.position;
 
-			// 인접 노드가 이동할 수 있는지 확인
 			if (!IsInRange(newPosition.x, newPosition.y, grid))
 			{
 				continue;
@@ -120,10 +107,8 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 				continue;
 			}
 
-			// 새 이동 비용 계산
 			float newGCost = curNode->gCost + direction.cost;
-			
-			// 탐색한 이웃 노드가 이미 OpenNode에 있는 경우 cost적으로 더 효율적인지 판단
+
 			Node* openNode = FindOpenNode(newPosition.x, newPosition.y);
 			if (openNode)
 			{
@@ -132,12 +117,15 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 					openNode->gCost = newGCost;
 					openNode->fCost = openNode->gCost + openNode->hCost;
 					openNode->parentNode = curNode;
+
+					// 힙 중간에 있는 원소 값이 바뀌었으므로 힙 구조가 깨질 수 있음
+					// → 전체 재정렬 (아래 "주의사항" 참고)
+					std::make_heap(openList.begin(), openList.end(), CompareNode);
 				}
 
 				continue;
 			}
 
-			// OpenNode목록에 없는 새로 탐색된 노드인 경우
 			Node* neighborNode = CreateNode(newPosition, curNode);
 
 			neighborNode->gCost = newGCost;
@@ -145,6 +133,7 @@ std::vector<Vector2> AStar::FindPath(Vector2 startPos, Vector2 destinationPos, s
 			neighborNode->fCost = neighborNode->gCost + neighborNode->hCost;
 
 			openList.emplace_back(neighborNode);
+			std::push_heap(openList.begin(), openList.end(), CompareNode);
 		}
 	}
 
@@ -174,13 +163,14 @@ void AStar::DisplayPath(std::vector<std::vector<int>>& grid, const std::vector<V
 }
 
 void AStar::Clear()
-{	for (Node* node : allocatedNodes)
+{
+	for (Node* node : allocatedNodes)
 	{
 		delete node;
 	}
 
 	allocatedNodes.clear();
-	openList.clear();
+	openList.clear();   // 힙이든 아니든 vector::clear()로 충분
 	closedList.clear();
 
 	startNode = nullptr;
@@ -307,4 +297,14 @@ void AStar::ClearVisualization(std::vector<std::vector<int>>& grid)
 			}
 		}
 	}
+}
+
+bool AStar::CompareNode(const Node* a, const Node* b)
+{
+	if (a->fCost != b->fCost)
+	{
+		return a->fCost > b->fCost; // min-heap이 되도록 반전
+	}
+
+	return a->hCost > b->hCost;
 }

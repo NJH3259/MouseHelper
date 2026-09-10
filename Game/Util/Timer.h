@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿#include <Windows.h>
+#include <cstdint>
+
+#pragma once
 
 class Timer
 {
@@ -21,10 +24,41 @@ public:
 
     inline float GetElapsedTime() const { return elapsedTime; }
 
+    // Debugging Time Fuctions
+
+    inline void CheckStartStat()
+    {
+        LARGE_INTEGER counter;
+        QueryPerformanceCounter(&counter);
+        start = counter.QuadPart;
+    }
+
+    inline void CheckEndStat()
+    {
+        LARGE_INTEGER counter;
+        QueryPerformanceCounter(&counter);
+        end = counter.QuadPart;
+    }
+
+    inline float GetDebugTime() const
+    { 
+        LARGE_INTEGER frequency;
+        QueryPerformanceFrequency(&frequency);
+        return static_cast<float>(end - start) / static_cast<float>(frequency.QuadPart);
+    }
+
+    inline void ResetDebugTime()
+    {
+        start = end = 0;
+    }
+
 private:
     // 경과 시간 계산용 변수.
     float elapsedTime = 0.0f;
 
     // 타이머 목표 시간.
     float targetTime = 0.0f;
+
+    int64_t start;
+    int64_t end;
 };

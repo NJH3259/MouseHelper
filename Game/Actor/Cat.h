@@ -67,5 +67,8 @@ private:
 	std::vector<Vector2> path = {};
 
 	Timer moveTimer;
+
+	// 최적화 전후 시간 테스트를 위한 타이머
+	Timer debugTimer;
 };
 

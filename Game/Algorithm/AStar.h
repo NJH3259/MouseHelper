@@ -3,6 +3,7 @@
 #include "Node.h"
 #include <Math/Color.h>
 #include <vector>
+#include <algorithm>
 #include <memory>
 
 using namespace Craft;
@@ -46,6 +47,8 @@ private:
 	bool IsDestination(const Node* node) const;
 
 	void ClearVisualization(std::vector<std::vector<int>>& grid);
+	
+	static bool CompareNode(const Node* a, const Node* b);
 
 private:
 	std::vector<Node*> allocatedNodes;

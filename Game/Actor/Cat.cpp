@@ -15,7 +15,7 @@ Cat::Cat(const Vector2 position, Color color)
 {
 	ChangeImage(Util::LoadImageFromFile("Cat.txt", "../Assets/"));
 
-	moveTimer.SetTargetTime(0.14f);
+	moveTimer.SetTargetTime(0.105f);
 
 	sortingOrder = 1;
 
@@ -46,6 +46,7 @@ void Cat::Tick(float deltaTime)
 	}
 
 	moveTimer.Tick(deltaTime);
+
 
 	pivot = Vector2(position.x + (int)(GetWidth() / 2), position.y + (int)(GetHeight() / 2));
 
@@ -141,8 +142,12 @@ void Cat::MoveToMouse()
 		if(moveTimer.IsTimeOut())
 		{
 			//탐색한 mouse를 향해 A*알고리즘으로 경로 탐색
+			debugTimer.ResetDebugTime();
+			debugTimer.CheckStartStat();
 			path.clear();
 			path = catPathFinder.FindPath(pivot, mouse->GetPivot(), gridForPath);
+			debugTimer.CheckEndStat();
+			debugTimer.GetDebugTime();
 
 			// 피봇이 mouse의 피봇과 완전히 겹치는 경우 path의 size는 1이다(자기 자신의 위치만 들어있음)
 			if (path.size() > 1)
@@ -235,6 +240,18 @@ void Cat::MoveToClosestGround(Craft::Vector2& pivot, const std::vector<std::vect
 				if (ix < 0 || ix >= grid[0].size())
 				{
 					continue;
+				}
+
+				// 최적화
+				// 가장 테두리만 조사하기 위해 iy = pivot.y - index 혹은 iy = pivot.y + index가 아니면
+				// ix = pivot.x - index, ix = pivot.x + index만 조사
+
+				if (iy != pivot.y - index && iy != pivot.y + index)
+				{
+					if (ix != pivot.x - index && ix != pivot.x + index)
+					{
+						continue;
+					}
 				}
 
 				// 해당 위치가 벽이면 다시 반복문 탐색
